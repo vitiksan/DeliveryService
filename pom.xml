@@ -52,7 +52,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>com.DevStarters.Support.Main</mainClass>
+              <mainClass>com.DevStarters.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
