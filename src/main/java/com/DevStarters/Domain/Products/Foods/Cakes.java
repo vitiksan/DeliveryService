@@ -1,4 +1,4 @@
 package com.DevStarters.Domain.Products.Foods;
 
-public class Cakes {
+public class Cakes extends Food{
 }

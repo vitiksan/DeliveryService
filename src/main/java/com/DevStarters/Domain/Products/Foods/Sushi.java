@@ -1,4 +1,4 @@
 package com.DevStarters.Domain.Products.Foods;
 
-public class Sushi {
+public class Sushi extends Food{
 }
