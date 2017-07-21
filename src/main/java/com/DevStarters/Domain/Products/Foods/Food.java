@@ -7,7 +7,6 @@ import java.time.Period;
 import java.util.HashSet;
 
 public class Food extends Product {
-
     private HashSet<Product> ingredients;
     private String kitchen;
 
