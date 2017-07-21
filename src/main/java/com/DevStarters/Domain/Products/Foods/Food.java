@@ -16,15 +16,13 @@ public class Food extends Product {
         kitchen = "none";
     }
 
-    public Food(String name, double price, String vendor, Period periodOfValidity,
-                HashSet<Product> ingredients, String kitchen) {
+    public Food(String name, double price, String vendor, Period periodOfValidity, String kitchen) {
         super(name, price, vendor, periodOfValidity);
         ingredients = new HashSet<>();
         this.kitchen = kitchen;
     }
 
-    public Food(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate,
-                HashSet<Product> ingredients, String kitchen) {
+    public Food(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate, String kitchen) {
         super(name, price, vendor, productionDate, expirationDate);
         ingredients = new HashSet<>();
         this.kitchen = kitchen;
@@ -46,12 +44,12 @@ public class Food extends Product {
         this.kitchen = kitchen;
     }
 
-    public void addProductToFood(Product product){
-        ingredients.add(product);
+    public void setExpirationDate() {
+        LocalDate date = getProductionDate().plus(Period.ofDays(5));
+        for (Product product : ingredients) {
+            if (product.getExpirationDate().isBefore(date)) date = product.getExpirationDate();
+        }
+        setExpirationDate(date);
     }
 
-    public Product removeProductFromFood(Product product){
-        ingredients.remove(product);
-        return (ingredients.contains(product)) ? product : null;
-    }
 }
