@@ -13,12 +13,11 @@ public class Pizza extends Food{
         setKitchen("Italian");
     }
 
-    public Pizza(String name, double price, String vendor, Period periodOfValidity, HashSet<Product> ingredients) {
-        super(name, price, vendor, periodOfValidity, ingredients,"Italian");
+    public Pizza(String name, double price, String vendor, Period periodOfValidity) {
+        super(name, price, vendor, periodOfValidity,new HashSet<Product>(),"Italian");
     }
 
-    public Pizza(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate,
-                 HashSet<Product> ingredients) {
-        super(name, price, vendor, productionDate, expirationDate, ingredients, "Italian");
+    public Pizza(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate) {
+        super(name, price, vendor, productionDate, expirationDate, new HashSet<Product>(), "Italian");
     }
 }

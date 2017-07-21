@@ -12,12 +12,11 @@ public class Barbecue extends Food{
         setKitchen("American");
     }
 
-    public Barbecue(String name, double price, String vendor, Period periodOfValidity, HashSet<Product> ingredients) {
-        super(name, price, vendor, periodOfValidity, ingredients, "American");
+    public Barbecue(String name, double price, String vendor, Period periodOfValidity) {
+        super(name, price, vendor, periodOfValidity,new HashSet<Product>(), "American");
     }
 
-    public Barbecue(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate,
-                    HashSet<Product> ingredients) {
-        super(name, price, vendor, productionDate, expirationDate, ingredients, "American");
+    public Barbecue(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate) {
+        super(name, price, vendor, productionDate, expirationDate,new HashSet<Product>(), "American");
     }
 }
