@@ -9,25 +9,25 @@ import java.util.HashSet;
 public class Food extends Product {
 
     private HashSet<Product> ingredients;
-    private String cousine;
+    private String kitchen;
 
     public Food() {
         ingredients = new HashSet<>();
-        cousine = "none";
+        kitchen = "none";
     }
 
     public Food(String name, double price, String vendor, Period periodOfValidity,
-                HashSet<Product> ingredients, String cousine) {
+                HashSet<Product> ingredients, String kitchen) {
         super(name, price, vendor, periodOfValidity);
         ingredients = new HashSet<>();
-        this.cousine = cousine;
+        this.kitchen = kitchen;
     }
 
     public Food(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate,
-                HashSet<Product> ingredients, String cousine) {
+                HashSet<Product> ingredients, String kitchen) {
         super(name, price, vendor, productionDate, expirationDate);
         ingredients = new HashSet<>();
-        this.cousine = cousine;
+        this.kitchen = kitchen;
     }
 
     public HashSet<Product> getIngredients() {
@@ -36,5 +36,22 @@ public class Food extends Product {
 
     public void setIngredients(HashSet<Product> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getKitchen() {
+        return kitchen;
+    }
+
+    public void setKitchen(String kitchen) {
+        this.kitchen = kitchen;
+    }
+
+    public void addProductToFood(Product product){
+        ingredients.add(product);
+    }
+
+    public Product removeProductFromFood(Product product){
+        ingredients.remove(product);
+        return (ingredients.contains(product)) ? product : null;
     }
 }
