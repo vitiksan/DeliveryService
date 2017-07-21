@@ -52,4 +52,12 @@ public class Food extends Product {
         setExpirationDate(date);
     }
 
+    public void addProductToFood(Product product){
+        ingredients.add(product);
+    }
+
+    public Product removeProductFromFood(Product product){
+        ingredients.remove(product);
+        return (ingredients.contains(product)) ? product : null;
+    }
 }

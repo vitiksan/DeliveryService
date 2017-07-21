@@ -1,10 +1,7 @@
 package com.DevStarters.Domain.Products.Foods;
 
-import com.DevStarters.Domain.Products.Product;
-
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashSet;
 
 public class Cakes extends Food{
     public Cakes() {
