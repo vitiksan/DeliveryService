@@ -23,12 +23,15 @@ public class Account {
     public Account(int userId) {
         this.userId = userId;
         this.cardNumber = generateVCNumber();
+        balance = 0;
+        pass = 0000;
     }
 
-    public Account(double balance, int pass) {
+    public Account(int userId,double balance, int pass) {
         this.cardNumber = generateVCNumber();
         this.balance = balance;
         this.pass = pass;
+        this.userId = userId;
         setExpCard();
     }
 
