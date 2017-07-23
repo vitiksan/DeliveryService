@@ -27,7 +27,7 @@ public class User {
     }
 
     public User(String name, String surname, String login, String password,
-                String address, int year, int month, int day, ArrayList<Account> accounts) {
+                String address, int year, int month, int day) {
         this.name = name;
         this.surname = surname;
         this.login = login;
