@@ -76,7 +76,8 @@ public class Account {
      * @return - true якщо операція виконана, false якщо ні
      */
     public boolean getMoney(double count) {
-        if (count <= this.balance) {
+        boolean temp = checkPassword();
+        if (count <= this.balance && temp) {
             this.balance -= count;
             return true;
         }
