@@ -12,7 +12,7 @@ public class Account {
     private String cardNumber;
     private double balance;
     private int pass;
-    private LocalDate expCard;
+    private LocalDate expirationCardDate;
     private int userId;
     private HashSet<Transaction> transactions = new HashSet<Transaction>();
 
@@ -132,19 +132,19 @@ public class Account {
     }
 
     private void setExpCard() {
-        expCard = LocalDate.now().plus(Period.ofYears(4));
+        expirationCardDate = LocalDate.now().plus(Period.ofYears(4));
     }
 
-    public LocalDate getExpCard() {
-        return expCard;
+    public LocalDate getExpirationCardDate() {
+        return expirationCardDate;
     }
 
-    protected void setExpCard(LocalDate expCard) {
-        this.expCard = expCard;
+    protected void setExpirationCardDate(LocalDate expirationCardDate) {
+        this.expirationCardDate = expirationCardDate;
     }
 
     public boolean checkExpDate() {
-        return expCard.isBefore(LocalDate.now().minus(Period.ofDays(7)));
+        return expirationCardDate.isBefore(LocalDate.now().minus(Period.ofDays(7)));
     }
 
     public int getUserId() {

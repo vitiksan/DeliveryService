@@ -5,13 +5,33 @@ import com.DevStarters.Domain.Products.Product;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class Shop implements ChainStore {
+public class Shop implements IChainStore {
     private int id;
     private String name;
     private String description;
     private String address;
     private String kitchen;
+    private String type;
     private HashSet<Product> items;
+
+    public Shop() {
+        id=0;
+        name="none";
+        description="none";
+        address="none";
+        kitchen="none";
+        type="none";
+        items=new HashSet<>();
+    }
+
+    public Shop(String name, String description, String address, String kitchen, String type) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.kitchen = kitchen;
+        this.type = type;
+        items=new HashSet<>();
+    }
 
     @Override
     public int getId() {
@@ -56,6 +76,14 @@ public class Shop implements ChainStore {
     @Override
     public String getKitchen() {
         return kitchen;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
