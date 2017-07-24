@@ -109,4 +109,5 @@ public class Shop implements ChainStore {
         boolean temp = items.remove(product);
         return (temp) ? product : null;
     }
+
 }
