@@ -16,4 +16,5 @@ public interface ChainStore {
     void addItem(Product product);
     Product removeItem();
     Product removeItem(Product product);
+
 }
