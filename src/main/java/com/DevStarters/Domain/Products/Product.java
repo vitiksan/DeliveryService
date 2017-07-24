@@ -7,30 +7,30 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    private String vendor;
+    private int vendorId;
     private LocalDate productionDate;
     private LocalDate expirationDate;
 
     public Product() {
         name = "none";
         price = 0;
-        vendor = "none";
+        vendorId =0;
         productionDate = LocalDate.now();
         expirationDate = LocalDate.now();
     }
 
-    public Product(String name, double price, String vendor, Period periodOfValidity) {
+    public Product(String name, double price, int vendorId, Period periodOfValidity) {
         this.name = name;
         this.price = price;
-        this.vendor = vendor;
+        this.vendorId = vendorId;
         productionDate = LocalDate.now();
         expirationDate = productionDate.plus(periodOfValidity);
     }
 
-    public Product(String name, double price, String vendor, LocalDate productionDate, LocalDate expirationDate) {
+    public Product(String name, double price, int vendorId, LocalDate productionDate, LocalDate expirationDate) {
         this.name = name;
         this.price = price;
-        this.vendor = vendor;
+        this.vendorId = vendorId;
         this.productionDate = productionDate;
         this.expirationDate = expirationDate;
     }
@@ -59,12 +59,12 @@ public class Product {
         this.price = price;
     }
 
-    public String getVendor() {
-        return vendor;
+    public int getVendorId() {
+        return vendorId;
     }
 
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
+    public void setVendorId(int vendorId) {
+        this.vendorId = vendorId;
     }
 
     public LocalDate getProductionDate() {

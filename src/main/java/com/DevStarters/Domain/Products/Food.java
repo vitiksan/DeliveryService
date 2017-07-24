@@ -1,4 +1,4 @@
-package com.DevStarters.Domain.Products.Foods;
+package com.DevStarters.Domain.Products;
 
 import com.DevStarters.Domain.Products.Product;
 
