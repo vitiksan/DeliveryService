@@ -6,7 +6,7 @@ import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SimpleIngridientGenerator {
+public class IngridientGenerator {
     private static Set<Product> ingredients = new HashSet<Product>();
 
     public static Product getIngridient(String name,double price){

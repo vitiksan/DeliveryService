@@ -1,4 +1,4 @@
 package com.DevStarters.Domain.ChainStores;
 
-public class Restaurant extends ChainStore{
+public class Restaurant implements ChainStore{
 }
