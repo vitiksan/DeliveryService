@@ -1,7 +1,5 @@
 package com.DevStarters.Domain.Products;
 
-import com.DevStarters.Domain.Products.Product;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
