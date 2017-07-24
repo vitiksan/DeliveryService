@@ -14,6 +14,24 @@ public class Restaurant implements ChainStore {
     private String kitchen;
     private HashSet<Food> foods;
 
+    public Restaurant() {
+        id = 0;
+        name = "none";
+        description = "none";
+        address = "none";
+        kitchen = "none";
+        foods = new HashSet<>();
+    }
+
+    public Restaurant(int id, String name, String description, String address, String kitchen) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.kitchen = kitchen;
+        foods = new HashSet<>();
+    }
+
     @Override
     public void setId(int id) {
         this.id = id;
