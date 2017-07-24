@@ -1,5 +1,7 @@
 package com.DevStarters.Domain.Products;
 
+import com.DevStarters.Domain.Products.Product;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
@@ -13,14 +15,14 @@ public class Food extends Product {
         kitchen = "none";
     }
 
-    public Food(String name, double price, int vendor, Period periodOfValidity, String kitchen) {
-        super(name, price, vendor, periodOfValidity);
+    public Food(String name, double price, int vendorId, Period periodOfValidity, String kitchen) {
+        super(name, price, vendorId, periodOfValidity);
         ingredients = new HashSet<>();
         this.kitchen = kitchen;
     }
 
-    public Food(String name, double price, int vendor, LocalDate productionDate, LocalDate expirationDate, String kitchen) {
-        super(name, price, vendor, productionDate, expirationDate);
+    public Food(String name, double price, int vendorId, LocalDate productionDate, LocalDate expirationDate, String kitchen) {
+        super(name, price, vendorId, productionDate, expirationDate);
         ingredients = new HashSet<>();
         this.kitchen = kitchen;
     }
@@ -54,7 +56,7 @@ public class Food extends Product {
     }
 
     public Product removeProductFromFood(Product product){
-        ingredients.remove(product);
-        return (ingredients.contains(product)) ? product : null;
+        boolean temp =ingredients.remove(product);
+        return (temp) ? product : null;
     }
 }
