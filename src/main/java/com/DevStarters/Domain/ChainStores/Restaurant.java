@@ -89,6 +89,7 @@ public class Restaurant implements ChainStore {
 
     @Override
     public Product removeItem() {
+
         Scanner in = new Scanner(System.in);
         Food temp = null;
         for (Food food : foods) {
