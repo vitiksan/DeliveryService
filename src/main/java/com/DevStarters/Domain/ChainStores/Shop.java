@@ -13,6 +13,24 @@ public class Shop implements ChainStore {
     private String kitchen;
     private HashSet<Product> items;
 
+    public Shop() {
+        id = 0;
+        name = "none";
+        description = "none";
+        address = "none";
+        kitchen = "none";
+        items = new HashSet<>();
+    }
+
+    public Shop(String name, String description, String address, String kitchen) {
+        this.id = 0;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.kitchen = kitchen;
+        items = new HashSet<>();
+    }
+
     @Override
     public int getId() {
         return id;
