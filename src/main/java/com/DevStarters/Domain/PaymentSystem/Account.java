@@ -1,5 +1,7 @@
 package com.DevStarters.Domain.PaymentSystem;
 
+import com.DevStarters.DAO.Identificator;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Date;
@@ -7,7 +9,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Account {
+public class Account implements Identificator<Integer> {
     private int id;
     private String cardNumber;
     private double balance;
