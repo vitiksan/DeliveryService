@@ -1,0 +1,131 @@
+package com.DevStarters.DAO;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serializable> implements IGenDao<T,PK> {
+    private Connection connection;
+
+    public AbstractDao(Connection connection) {
+        this.connection = connection;
+    }
+
+    public abstract String getSelectQuery();
+
+    public abstract String getSelectAllQuery();
+
+    public abstract String getUpdateQuery();
+
+    public abstract String getCreateQuery();
+
+    public abstract String getDeleteQuery();
+
+    public abstract ArrayList<T> parsData(ResultSet rs) throws DAOExeption;
+
+    public abstract void parsUpdate(PreparedStatement prSt, T obj) throws DAOExeption;
+
+    public abstract void parsInsert(PreparedStatement prSt, T obj) throws DAOExeption;
+
+    @Override
+    public T create(T obj) throws DAOExeption {
+        T temp;
+        String query = getCreateQuery();
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            parsInsert(prSt, obj);
+            int count = prSt.executeUpdate();
+            if (count != 1) throw new DAOExeption("Error. Created more then 1 object " + count);
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+
+
+        query = getSelectQuery() + "(SELECT last_insert_id());";
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            ResultSet rs = prSt.executeQuery();
+            ArrayList<T> someList = parsData(rs);
+
+            if (someList == null || someList.size() !=1)
+                throw new DAOExeption("Error with search created object by id");
+            temp = someList.iterator().next();
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+
+
+        return temp;
+    }
+
+    @Override
+    public T read(int id) throws DAOExeption {
+        ArrayList<T> someList;
+        String query = getSelectQuery() + "?;";
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            prSt.setInt(1, id);
+            ResultSet rs = prSt.executeQuery();
+            someList = parsData(rs);
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+
+        if (someList == null || someList.size() == 0) return null;
+
+        if (someList.size() > 1) {
+            throw new DAOExeption("Отримано забато даних");
+        }
+
+        return someList.iterator().next();
+    }
+
+    @Override
+    public ArrayList<T> readAll() throws DAOExeption {
+        ArrayList<T> someList;
+        String query = getSelectAllQuery();
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            ResultSet resultSet = prSt.executeQuery();
+            someList = parsData(resultSet);
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+        return someList;
+    }
+
+    @Override
+    public boolean update(T obj) throws DAOExeption {
+        String query = getUpdateQuery();
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            parsUpdate(prSt, obj);
+            int count = prSt.executeUpdate();
+            if (count != 1) throw new DAOExeption("Error. Modified more then 1 field " + count);
+            else return true;
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+    }
+
+    @Override
+    public boolean delete(T obj) throws DAOExeption {
+        String query = getDeleteQuery();
+
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
+            try {
+                prSt.setObject(1, obj.getId());
+            } catch (Exception e) {
+                throw new DAOExeption(e);
+            }
+
+            int count = prSt.executeUpdate();
+            if (count != 1) throw new DAOExeption("Error. Deleted more then 1 field " + count);
+            else return true;
+        } catch (Exception e) {
+            throw new DAOExeption(e);
+        }
+    }
+}

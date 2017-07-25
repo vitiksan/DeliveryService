@@ -119,5 +119,4 @@ public class Shop implements IChainStore {
         boolean temp = items.remove(product);
         return (temp) ? product : null;
     }
-
 }
