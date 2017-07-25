@@ -23,23 +23,23 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
 
     public abstract String getDeleteQuery();
 
-    public abstract ArrayList<T> parsData(ResultSet rs) throws DAOExeption;
+    public abstract ArrayList<T> parsData(ResultSet rs) throws DaoExeption;
 
-    public abstract void parsUpdate(PreparedStatement prSt, T obj) throws DAOExeption;
+    public abstract void parsUpdate(PreparedStatement prSt, T obj) throws DaoExeption;
 
-    public abstract void parsInsert(PreparedStatement prSt, T obj) throws DAOExeption;
+    public abstract void parsInsert(PreparedStatement prSt, T obj) throws DaoExeption;
 
     @Override
-    public T create(T obj) throws DAOExeption {
+    public T create(T obj) throws DaoExeption {
         T temp;
         String query = getCreateQuery();
 
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             parsInsert(prSt, obj);
             int count = prSt.executeUpdate();
-            if (count != 1) throw new DAOExeption("Error. Created more then 1 object " + count);
+            if (count != 1) throw new DaoExeption("Error. Created more then 1 object " + count);
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
 
 
@@ -50,10 +50,10 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             ArrayList<T> someList = parsData(rs);
 
             if (someList == null || someList.size() !=1)
-                throw new DAOExeption("Error with search created object by id");
+                throw new DaoExeption("Error with search created object by id");
             temp = someList.iterator().next();
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
 
 
@@ -61,7 +61,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
     }
 
     @Override
-    public T read(int id) throws DAOExeption {
+    public T read(int id) throws DaoExeption {
         ArrayList<T> someList;
         String query = getSelectQuery() + "?;";
 
@@ -70,20 +70,20 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             ResultSet rs = prSt.executeQuery();
             someList = parsData(rs);
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
 
         if (someList == null || someList.size() == 0) return null;
 
         if (someList.size() > 1) {
-            throw new DAOExeption("Отримано забато даних");
+            throw new DaoExeption("Отримано забато даних");
         }
 
         return someList.iterator().next();
     }
 
     @Override
-    public ArrayList<T> readAll() throws DAOExeption {
+    public ArrayList<T> readAll() throws DaoExeption {
         ArrayList<T> someList;
         String query = getSelectAllQuery();
 
@@ -91,41 +91,41 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             ResultSet resultSet = prSt.executeQuery();
             someList = parsData(resultSet);
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
         return someList;
     }
 
     @Override
-    public boolean update(T obj) throws DAOExeption {
+    public boolean update(T obj) throws DaoExeption {
         String query = getUpdateQuery();
 
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             parsUpdate(prSt, obj);
             int count = prSt.executeUpdate();
-            if (count != 1) throw new DAOExeption("Error. Modified more then 1 field " + count);
+            if (count != 1) throw new DaoExeption("Error. Modified more then 1 field " + count);
             else return true;
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
     }
 
     @Override
-    public boolean delete(T obj) throws DAOExeption {
+    public boolean delete(T obj) throws DaoExeption {
         String query = getDeleteQuery();
 
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             try {
                 prSt.setObject(1, obj.getId());
             } catch (Exception e) {
-                throw new DAOExeption(e);
+                throw new DaoExeption(e);
             }
 
             int count = prSt.executeUpdate();
-            if (count != 1) throw new DAOExeption("Error. Deleted more then 1 field " + count);
+            if (count != 1) throw new DaoExeption("Error. Deleted more then 1 field " + count);
             else return true;
         } catch (Exception e) {
-            throw new DAOExeption(e);
+            throw new DaoExeption(e);
         }
     }
 }

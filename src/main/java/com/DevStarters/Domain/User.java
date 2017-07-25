@@ -1,12 +1,13 @@
 package com.DevStarters.Domain;
 
+import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Domain.PaymentSystem.Account;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class User {
+public class User implements Identificator<Integer> {
     private int id;
     private String name;
     private String surname;
@@ -41,7 +42,7 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
@@ -73,7 +74,7 @@ public class User {
         return login;
     }
 
-    public void setLogin(String login) {
+    protected void setLogin(String login) {
         this.login = login;
     }
 
@@ -81,7 +82,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    protected void setPassword(String password) {
         this.password = password;
     }
 

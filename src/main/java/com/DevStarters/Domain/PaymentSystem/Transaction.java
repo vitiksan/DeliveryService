@@ -6,6 +6,7 @@ public class Transaction {
     private int id;
     private int accountIdFrom;
     private int accountIdTo;
+    private double amount;
     private LocalDateTime transactionTime;
 
     public Transaction() {
@@ -40,6 +41,14 @@ public class Transaction {
 
     public void setAccountIdTo(int accountIdTo) {
         this.accountIdTo = accountIdTo;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public LocalDateTime getTransactionTime() {
