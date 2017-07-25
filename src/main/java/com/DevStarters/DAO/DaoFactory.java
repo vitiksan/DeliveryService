@@ -2,7 +2,7 @@ package com.DevStarters.DAO;
 
 public interface DaoFactory<T> {
 
-    public interface DAOCreator<T>{
+    public interface DaoCreator<T>{
         public AbstractDao create(T connection);
     }
 
