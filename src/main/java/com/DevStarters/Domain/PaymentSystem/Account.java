@@ -1,12 +1,11 @@
 package com.DevStarters.Domain.PaymentSystem;
 
 import com.DevStarters.DAO.Identificator;
+import com.DevStarters.Support.CardNumberGenerator;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Account implements Identificator<Integer> {
@@ -19,18 +18,18 @@ public class Account implements Identificator<Integer> {
     private HashSet<Transaction> transactions = new HashSet<Transaction>();
 
     public Account() {
-        this.cardNumber = generateVCNumber();
+        this.cardNumber = CardNumberGenerator.generateVCNumber();
     }
 
     public Account(int userId) {
         this.userId = userId;
-        this.cardNumber = generateVCNumber();
+        this.cardNumber = CardNumberGenerator.generateVCNumber();
         balance = 0;
         pass = 0000;
     }
 
     public Account(int userId,double balance, int pass) {
-        this.cardNumber = generateVCNumber();
+        this.cardNumber = CardNumberGenerator.generateVCNumber();
         this.balance = balance;
         this.pass = pass;
         this.userId = userId;
@@ -51,19 +50,6 @@ public class Account implements Identificator<Integer> {
 
     protected void setCardNumber(String numberAccount) {
         this.cardNumber = numberAccount;
-    }
-
-    /**
-     * @return - генерація 16-значного номера рахунку
-     */
-    private String generateVCNumber() {
-        String temp = "4";
-        Date currentDate = new Date();
-        Random random = new Random(currentDate.getTime());
-        for (int i = 0; i < 15; i++) {
-            temp += String.valueOf(random.nextInt(10));
-        }
-        return temp;
     }
 
     public double getBalance() {

@@ -3,7 +3,6 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoExeption;
 import com.DevStarters.DAO.DaoFactory;
-import com.DevStarters.Domain.Products.Product;
 import com.DevStarters.Domain.User;
 import org.apache.log4j.Logger;
 

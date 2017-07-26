@@ -1,4 +1,4 @@
-package com.DevStarters.Domain.Products;
+package com.DevStarters.Domain;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -7,6 +7,7 @@ public class Product {
     private int id;
     private String name;
     private double price;
+    private String description;
     private int vendorId;
     private LocalDate productionDate;
     private LocalDate expirationDate;
@@ -59,6 +60,14 @@ public class Product {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getVendorId() {
         return vendorId;
     }
@@ -91,6 +100,7 @@ public class Product {
         Product product = (Product) o;
 
         if (Double.compare(product.price, price) != 0) return false;
+        if (vendorId != product.vendorId) return false;
         return name != null ? name.equals(product.name) : product.name == null;
     }
 
@@ -101,7 +111,7 @@ public class Product {
         result = name != null ? name.hashCode() : 0;
         temp = Double.doubleToLongBits(price);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + vendorId;
         return result;
     }
-
 }
