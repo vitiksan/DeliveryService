@@ -73,6 +73,7 @@ public class Order implements Identificator<Integer>{
 
     public void addNewTransaction(OrderLine line){
         for(Transaction transaction:transactions){
+
             //TODO
         }
     }
