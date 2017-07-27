@@ -1,9 +1,9 @@
-package com.DevStarters.Domain.Order;
+package com.DevStarters.Domain;
 
 import com.DevStarters.DAO.Identificator;
-import com.DevStarters.Domain.Product;
 
 public class OrderLine implements Identificator<Integer>{
+    private int id;
     private int orderId;
     private Product product;
     private double price;
@@ -21,7 +21,11 @@ public class OrderLine implements Identificator<Integer>{
 
     @Override
     public int getId() {
-        return 0;
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getOrderId() {
