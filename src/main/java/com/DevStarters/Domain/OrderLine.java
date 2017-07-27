@@ -3,6 +3,7 @@ package com.DevStarters.Domain;
 import com.DevStarters.DAO.Identificator;
 
 public class OrderLine implements Identificator<Integer>{
+
     private int orderId;
     private Product product;
     private double price;
