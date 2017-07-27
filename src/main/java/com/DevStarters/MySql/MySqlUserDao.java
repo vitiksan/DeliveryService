@@ -15,11 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
-
-    public MySqlUserDao(Connection connection) {
-        super(connection);
-    }
-
     private class ExtendAccount extends Account {
         public ExtendAccount() {
             super();
@@ -92,6 +87,10 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         protected void setAmount(double amount) {
             super.setAmount(amount);
         }
+    }
+
+    public MySqlUserDao(Connection connection) {
+        super(connection);
     }
 
     @Override
