@@ -57,7 +57,6 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
     @Override
     public ArrayList<OrderLine> parsData(ResultSet rs) throws DaoExeption {
         ArrayList<OrderLine> lines = new ArrayList<OrderLine>();
-
         try {
             while (rs.next()) {
                 OrderLine line = new OrderLine();
