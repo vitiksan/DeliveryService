@@ -1,4 +1,4 @@
-package com.DevStarters.Domain;
+package com.DevStarters.Domain.Order;
 
 import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Domain.PaymentSystem.Transaction;

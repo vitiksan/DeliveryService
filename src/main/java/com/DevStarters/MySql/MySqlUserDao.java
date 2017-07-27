@@ -87,18 +87,23 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         protected void setId(int id) {
             super.setId(id);
         }
+
+        @Override
+        protected void setAmount(double amount) {
+            super.setAmount(amount);
+        }
     }
 
     @Override
     public String getSelectQuery() {
         return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
-                "ON(a.account_id=t.account_id_from) WHERE user_id";
+                "ON(a.account_id=t.sender_account_id) WHERE user_id";
     }
 
     @Override
     public String getSelectAllQuery() {
         return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
-                "ON(a.account_id=t.account_id_from);";
+                "ON(a.account_id=t.sender_account_id);";
     }
 
     @Override
@@ -128,16 +133,16 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 ExtendUser user = new ExtendUser();
                 ExtendAccount account = new ExtendAccount();
                 ExtendTransaction transaction = new ExtendTransaction();
-                transaction.setId(rs.getInt("transaction_is"));
-                transaction.setAccountIdFrom(rs.getInt("account_id_from"));
-                transaction.setAccountIdTo(rs.getInt("account_id_to"));
-                transaction.setAmount(rs.getDouble("amount"));
-                transaction.setTransactionTime(((LocalDateTime) rs.getObject("transaction_date")));
+                transaction.setId(rs.getInt("transaction_id"));
+                transaction.setSenderAccountId(rs.getInt("sender_account_id"));
+                transaction.setRecipientCard(rs.getString("recipient_card"));
+                transaction.setAmount(rs.getDouble("transaction_amount"));
+                transaction.setTransactionTime(((LocalDateTime) rs.getObject("transaction_time")));
                 account.setId(rs.getInt("account_id"));
                 account.setCardNumber(rs.getString("account_card_number"));
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_password"));
-                account.setExpirationCardDate(rs.getDate("account_validity").toLocalDate());
+                account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
                 for (ExtendAccount account1: accounts){
                     if (account.getId()==account1.getId()){
                         account1.addTransaction(transaction);

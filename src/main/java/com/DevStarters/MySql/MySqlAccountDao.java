@@ -54,25 +54,25 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public String getSelectQuery(){
         return "Select * FROM accounts ac JOIN transaction tr " +
-                "ON (tr.account_id_from=ac.account_id) WHERE user_id=";
+                "ON (tr.sender_account_id=ac.account_id) WHERE account_id=";
     }
 
     @Override
     public String getSelectAllQuery() {
         return "Select * FROM accounts ac JOIN transaction tr " +
-                "ON (tr.account_id_from=ac.account_id)";
+                "ON (tr.sender_account_id=ac.account_id)";
     }
 
     @Override
     public String getUpdateQuery() {
         return "UPDATE accounts SET account_card_number=?,account_balance=?," +
-                "account_pass=?,account_expiration_date=?";
+                "account_pass=?, user_id=? WHERE account_id=?";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO accounts (account_card_number,account_balance," +
-                "account_pass,account_expiration_date) VALUES(?,?,?,?)";
+                "account_pass,account_expiration_date,user_id) VALUES(?,?,?,?,?)";
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             while (rs.next()) {
                 AccountForDB account = new AccountForDB();
                 account.setId(rs.getInt("account_id"));
-                account.setCardNumber(rs.getString("account_cardNumber"));
+                account.setCardNumber(rs.getString("account_card_number"));
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_pass"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date").toLocalDate());
@@ -107,9 +107,8 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setDate(4,java.sql.Date.valueOf(obj.getExpirationCardDate()));
-            prSt.setInt(5,obj.getUserId());
-            prSt.setInt(6,obj.getId());
+            prSt.setInt(4,obj.getUserId());
+            prSt.setInt(5,obj.getId());
         } catch (SQLException e) {
            throw new DaoExeption();
         }
@@ -121,8 +120,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setDate(4,java.sql.Date.valueOf(obj.getExpirationCardDate()));
-            prSt.setInt(5,obj.getUserId());
+            prSt.setInt(4,obj.getUserId());
         } catch (SQLException e) {
             throw new DaoExeption();
         }

@@ -1,22 +1,27 @@
 package com.DevStarters.Domain.PaymentSystem;
 
+import com.DevStarters.DAO.Identificator;
+
 import java.time.LocalDateTime;
 
-public class Transaction {
+public class Transaction implements Identificator<Integer> {
     private int id;
-    private int accountIdFrom;
-    private int accountIdTo;
+    private int senderAccountId;
+    private String recipientCard;
     private double amount;
     private LocalDateTime transactionTime;
+    private int orderId;
 
     public Transaction() {
-        accountIdFrom=0;
-        accountIdTo=0;
+        senderAccountId = 0;
+        recipientCard = "";
+        amount = 0;
     }
 
-    public Transaction(int accountIdFrom, int accountIdTo) {
-        this.accountIdFrom = accountIdFrom;
-        this.accountIdTo = accountIdTo;
+    public Transaction(int senderAccountId, String recipientCard, double amount) {
+        this.senderAccountId = senderAccountId;
+        this.recipientCard = recipientCard;
+        this.amount = amount;
     }
 
     public int getId() {
@@ -27,27 +32,27 @@ public class Transaction {
         this.id = id;
     }
 
-    public int getAccountIdFrom() {
-        return accountIdFrom;
+    public int getSenderAccountId() {
+        return senderAccountId;
     }
 
-    public void setAccountIdFrom(int accountIdFrom) {
-        this.accountIdFrom = accountIdFrom;
+    public void setSenderAccountId(int senderAccountId) {
+        this.senderAccountId = senderAccountId;
     }
 
-    public int getAccountIdTo() {
-        return accountIdTo;
+    public String getRecipientCard() {
+        return recipientCard;
     }
 
-    public void setAccountIdTo(int accountIdTo) {
-        this.accountIdTo = accountIdTo;
+    public void setRecipientCard(String recipientCard) {
+        this.recipientCard = recipientCard;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    protected void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -57,5 +62,13 @@ public class Transaction {
 
     public void setTransactionTime(LocalDateTime transactionTime) {
         this.transactionTime = transactionTime;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 }
