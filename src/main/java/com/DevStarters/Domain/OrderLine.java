@@ -11,7 +11,7 @@ public class OrderLine implements Identificator<Integer>{
     public OrderLine() {
     }
 
-    public OrderLine(int orderId, Product product) {
+    public OrderLine(int orderId, Product product,int count) {
         this.orderId = orderId;
         this.product = product;
         this.count = count;

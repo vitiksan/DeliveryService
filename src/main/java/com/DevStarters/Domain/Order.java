@@ -12,14 +12,24 @@ public class Order implements Identificator<Integer>{
     private int userId;
     private HashSet<OrderLine> lines;
     private LinkedList<Transaction>transactions;
+    private double price;
+    private String status;
 
     public Order() {
+        orderId=0;
+        status="none";
+        userId=0;
+        price=0;
+        lines=new HashSet<>();
+        transactions=new LinkedList<>();
     }
 
     public Order(int userId) {
         this.userId = userId;
         lines=new HashSet<>();
         transactions=new LinkedList<>();
+        this.price=allPrice();
+        status="not executed";
     }
 
     @Override
@@ -59,6 +69,22 @@ public class Order implements Identificator<Integer>{
         this.transactions = transactions;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public double allPrice(){
         double temp=0;
         for(OrderLine line:lines){
@@ -69,6 +95,7 @@ public class Order implements Identificator<Integer>{
 
     public void addNewLine(OrderLine line){
         lines.add(line);
+        this.price=allPrice();
     }
 
     public void addNewTransaction(OrderLine line){
