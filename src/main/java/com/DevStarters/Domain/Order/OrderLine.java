@@ -1,9 +1,9 @@
-package com.DevStarters.Domain;
+package com.DevStarters.Domain.Order;
 
 import com.DevStarters.DAO.Identificator;
+import com.DevStarters.Domain.Product;
 
 public class OrderLine implements Identificator<Integer>{
-
     private int orderId;
     private Product product;
     private double price;
