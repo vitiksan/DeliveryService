@@ -73,6 +73,7 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
                 line.setProduct(product);
                 line.setPrice(rs.getDouble("order_line_price"));
                 line.setOrderId(rs.getInt("order_id"));
+                lines.add(line);
             }
         } catch (Exception e) {
             throw new DaoExeption(e);
