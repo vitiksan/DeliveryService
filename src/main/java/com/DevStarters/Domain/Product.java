@@ -1,9 +1,11 @@
 package com.DevStarters.Domain;
 
+import com.DevStarters.DAO.Identificator;
+
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Product {
+public class Product implements Identificator<Integer> {
     private int id;
     private String name;
     private double price;

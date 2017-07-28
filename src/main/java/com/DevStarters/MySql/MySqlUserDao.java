@@ -151,6 +151,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                     account.addTransaction(transaction);
                     accounts.add(account);
                 }
+
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
                 user.setSurname(rs.getString("user_surname"));
