@@ -69,6 +69,7 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
                 transaction.setAmount(rs.getInt("transaction_id"));
                 transaction.setTransactionTime((LocalDateTime) rs.getObject("transaction_time"));
                 transaction.setOrderId(rs.getInt("order_id"));
+                transactions.add(transaction);
             }
         } catch (Exception e) {
             throw new DaoExeption(e);

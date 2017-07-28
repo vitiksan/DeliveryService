@@ -1,14 +1,14 @@
 package com.DevStarters.Domain.Order;
 
 import com.DevStarters.DAO.Identificator;
+import com.DevStarters.Domain.OrderLine;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Order implements Identificator<Integer>{
-
-    private int orderId;
+    private int id;
     private int userId;
     private HashSet<OrderLine> lines;
     private LinkedList<Transaction>transactions;
@@ -16,11 +16,11 @@ public class Order implements Identificator<Integer>{
     private String status;
 
     public Order() {
-        orderId=0;
+        id =0;
         status="none";
         userId=0;
         price=0;
-        lines=new HashSet<>();
+        lines=new HashSet<OrderLine>();
         transactions=new LinkedList<>();
     }
 
@@ -34,15 +34,11 @@ public class Order implements Identificator<Integer>{
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getUserId() {
