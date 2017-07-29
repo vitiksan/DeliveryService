@@ -3,6 +3,7 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoExeption;
 import com.DevStarters.Domain.PaymentSystem.Account;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
+    private static final Logger log = Logger.getLogger(MySqlDaoFactory.class);
     public MySqlAccountDao(Connection connection) {
         super(connection);
     }
