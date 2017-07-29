@@ -30,7 +30,6 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     @Override
     public Connection getConnection() throws DaoExeption {
         Connection connection = null;
-
         try {
             Class.forName(driverName); // Завантажуємо клас драйвера
         } catch (ClassNotFoundException e) {
