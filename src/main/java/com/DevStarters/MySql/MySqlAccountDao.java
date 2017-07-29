@@ -46,11 +46,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
         protected void setExpirationCardDate(LocalDate expirationCardDate) {
             super.setExpirationCardDate(expirationCardDate);
         }
-
-        @Override
-        protected void setUserId(int userId) {
-            super.setUserId(userId);
-        }
     }
 
     @Override
@@ -68,13 +63,13 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public String getUpdateQuery() {
         return "UPDATE accounts SET account_card_number=?,account_balance=?," +
-                "account_pass=?, user_id=? WHERE account_id=?";
+                "account_pass=? WHERE account_id=?";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO accounts (account_card_number,account_balance," +
-                "account_pass,account_expiration_date,user_id) VALUES(?,?,?,?,?)";
+                "account_pass,account_expiration_date) VALUES(?,?,?,?,?)";
     }
 
     @Override
@@ -94,7 +89,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_pass"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date").toLocalDate());
-                account.setUserId(rs.getInt("user_id"));
                 accounts.add(account);
             }
         } catch (Exception e) {
@@ -109,8 +103,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setInt(4,obj.getUserId());
-            prSt.setInt(5,obj.getId());
+            prSt.setInt(4,obj.getId());
         } catch (SQLException e) {
            throw new DaoExeption();
         }
@@ -122,7 +115,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setInt(4,obj.getUserId());
         } catch (SQLException e) {
             throw new DaoExeption();
         }

@@ -28,7 +28,7 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     @Override
     public String getUpdateQuery() {
         return "UPDATE chain_stores SET chain_store_name=?,chain_store_description=?,chain_store_address=?," +
-                "chain_store_kitchen=?,chain_store_type=?,card_for_payments=?;";
+                "chain_store_kitchen=?,chain_store_type=?,card_for_payments=? WHERE chain_store_id=?;";
     }
 
     @Override

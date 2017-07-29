@@ -20,11 +20,6 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
         protected void setId(int id) {
             super.setId(id);
         }
-
-        @Override
-        protected void setAmount(double amount) {
-            super.setAmount(amount);
-        }
     }
 
     public MySqlTransactionDao(Connection connection) {

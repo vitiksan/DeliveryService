@@ -30,7 +30,7 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM products WHERE order_id=";
+        return "SELECT * FROM products WHERE product_id=";
     }
 
     @Override
@@ -46,7 +46,8 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO products (NULL,?,?,?,?,?,?);";
+        return "INSERT INTO products (product_name,product_price,product_description," +
+                "vendor_id,production_date,expiration_date) VALUES (?,?,?,?,?,?);";
     }
 
     @Override
