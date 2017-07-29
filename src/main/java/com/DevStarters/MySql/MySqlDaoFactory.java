@@ -3,6 +3,12 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoExeption;
 import com.DevStarters.DAO.DaoFactory;
+import com.DevStarters.Domain.ChainStore;
+import com.DevStarters.Domain.Order.Order;
+import com.DevStarters.Domain.OrderLine;
+import com.DevStarters.Domain.PaymentSystem.Account;
+import com.DevStarters.Domain.PaymentSystem.Transaction;
+import com.DevStarters.Domain.Product;
 import com.DevStarters.Domain.User;
 import org.apache.log4j.Logger;
 
@@ -56,6 +62,42 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
         allDao = new HashMap<Class, DaoCreator>();
 
         allDao.put(User.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(ChainStore.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(Order.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(OrderLine.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(Product.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(Transaction.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return null;
+            }
+        });
+        allDao.put(Account.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
                 return null;
