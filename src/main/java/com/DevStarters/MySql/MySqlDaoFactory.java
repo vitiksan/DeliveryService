@@ -63,43 +63,43 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
         allDao.put(User.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlUserDao(connection);
             }
         });
         allDao.put(ChainStore.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlChainStoreDao(connection);
             }
         });
         allDao.put(Order.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlOrderDao(connection);
             }
         });
         allDao.put(OrderLine.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlOrderLineDao(connection);
             }
         });
         allDao.put(Product.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlProductDao(connection);
             }
         });
         allDao.put(Transaction.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlTransactionDao(connection);
             }
         });
         allDao.put(Account.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlAccountDao(connection);
             }
         });
     }
