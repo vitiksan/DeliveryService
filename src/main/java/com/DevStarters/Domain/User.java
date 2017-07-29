@@ -127,5 +127,4 @@ public class User implements Identificator<Integer> {
         }
         return temp;
     }
-
 }
