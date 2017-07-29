@@ -26,11 +26,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
 
         @Override
-        protected void setUserId(int userId) {
-            super.setUserId(userId);
-        }
-
-        @Override
         protected void setId(int id) {
             super.setId(id);
 
@@ -52,7 +47,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    private class ExtendUser extends User{
+    private class ExtendUser extends User {
         public ExtendUser() {
             super();
         }
@@ -73,7 +68,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    private class ExtendTransaction extends Transaction{
+    private class ExtendTransaction extends Transaction {
         public ExtendTransaction() {
             super();
         }
@@ -81,11 +76,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         @Override
         protected void setId(int id) {
             super.setId(id);
-        }
-
-        @Override
-        protected void setAmount(double amount) {
-            super.setAmount(amount);
         }
     }
 
@@ -124,8 +114,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     @Override
     public ArrayList<User> parsData(ResultSet rs) throws DaoExeption {
         ArrayList<User> users = new ArrayList<User>();
-        HashSet<ExtendAccount> accounts = new HashSet<>();
-        boolean isAccount = false;
         boolean isUser = false;
         try {
             while (rs.next()) {
@@ -142,28 +130,21 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_password"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                for (ExtendAccount account1: accounts){
-                    if (account.getId()==account1.getId()){
-                        account1.addTransaction(transaction);
-                    }
-                }
-                if (!isAccount){
-                    account.addTransaction(transaction);
-                    accounts.add(account);
-                }
+                account.addTransaction(transaction);
 
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
                 user.setSurname(rs.getString("user_surname"));
                 user.setBornDate(rs.getDate("user_born_date").toLocalDate());
                 user.setAddress(rs.getString("user_address"));
-                for (User user1:users){
-                    if (user1.getId()==user.getId()){
-                        user1.getAccounts().addAll(accounts);
+                user.setAccount(account);
+                for (User item : users) {
+                    if (item.getId() == user.getId()) {
+                        item.getAccount().addTransaction(user.getAccount().getTransactions().iterator().next());
+                        isUser = true;
                     }
                 }
-                if (!isUser){
-                    user.getAccounts().addAll(accounts);
+                if (!isUser) {
                     users.add(user);
                 }
             }
@@ -179,7 +160,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
             prSt.setString(3, obj.getLogin());
-            prSt.setString(4,obj.getPassword());
+            prSt.setString(4, obj.getPassword());
             prSt.setString(5, obj.getAddress());
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
             prSt.setInt(7, obj.getId());
@@ -194,7 +175,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
             prSt.setString(3, obj.getLogin());
-            prSt.setString(4,obj.getPassword());
+            prSt.setString(4, obj.getPassword());
             prSt.setString(5, obj.getAddress());
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
         } catch (Exception e) {

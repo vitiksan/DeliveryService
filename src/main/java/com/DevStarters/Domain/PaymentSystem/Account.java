@@ -14,15 +14,9 @@ public class Account implements Identificator<Integer> {
     private double balance;
     private int pass;
     private LocalDate expirationCardDate;
-    private int userId;
     private HashSet<Transaction> transactions = new HashSet<Transaction>();
 
     public Account() {
-        this.cardNumber = CardNumberGenerator.generateVCNumber();
-    }
-
-    public Account(int userId) {
-        this.userId = userId;
         this.cardNumber = CardNumberGenerator.generateVCNumber();
         balance = 0;
         pass = 0000;
@@ -32,7 +26,6 @@ public class Account implements Identificator<Integer> {
         this.cardNumber = CardNumberGenerator.generateVCNumber();
         this.balance = balance;
         this.pass = pass;
-        this.userId = userId;
         setExpCard();
     }
 
@@ -135,15 +128,15 @@ public class Account implements Identificator<Integer> {
         return expirationCardDate.isBefore(LocalDate.now().minus(Period.ofDays(7)));
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    protected void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+    }
+
+    public HashSet<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(HashSet<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
