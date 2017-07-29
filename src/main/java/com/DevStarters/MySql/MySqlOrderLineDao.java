@@ -69,6 +69,7 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
                 product.setVendorId(rs.getInt("vendor_id"));
                 product.setProductionDate(rs.getDate("production_date").toLocalDate());
                 product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+
                 line.setCount(rs.getInt("product_count"));
                 line.setId(rs.getInt("order_line_id"));
                 line.setProduct(product);
