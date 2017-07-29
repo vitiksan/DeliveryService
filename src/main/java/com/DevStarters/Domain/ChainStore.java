@@ -1,11 +1,12 @@
 package com.DevStarters.Domain;
 
+import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Support.CardNumberGenerator;
 
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class ChainStore{
+public class ChainStore implements Identificator<Integer> {
     private int id;
     private String name;
     private String description;
