@@ -1,7 +1,7 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
 import com.DevStarters.Domain.User;
@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
     private class ExtendAccount extends Account {
@@ -112,7 +111,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public ArrayList<User> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<User> parsData(ResultSet rs) throws DaoException {
         ArrayList<User> users = new ArrayList<User>();
         boolean isUser = false;
         try {
@@ -149,13 +148,13 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 }
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return users;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, User obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, User obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
@@ -165,12 +164,12 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
             prSt.setInt(7, obj.getId());
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, User obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, User obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
@@ -179,7 +178,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
             prSt.setString(5, obj.getAddress());
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 }

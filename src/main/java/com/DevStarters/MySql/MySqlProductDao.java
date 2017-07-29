@@ -1,14 +1,12 @@
 package com.DevStarters.MySql;// Created by on 28.07.2017.
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.Product;
-import sun.tools.jar.resources.jar;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MySqlProductDao extends AbstractDao<Product, Integer> {
@@ -55,7 +53,7 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
     }
 
     @Override
-    public ArrayList<Product> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<Product> parsData(ResultSet rs) throws DaoException {
         ArrayList<Product> products = new ArrayList<Product>();
         try {
             while (rs.next()) {
@@ -70,13 +68,13 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
                 products.add(product);
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return products;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, Product obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, Product obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setDouble(2, obj.getPrice());
@@ -86,12 +84,12 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
             prSt.setDate(6, java.sql.Date.valueOf(obj.getExpirationDate()));
             prSt.setInt(7, obj.getId());
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, Product obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, Product obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setDouble(2, obj.getPrice());
@@ -100,7 +98,7 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
             prSt.setDate(5, java.sql.Date.valueOf(obj.getProductionDate()));
             prSt.setDate(6, java.sql.Date.valueOf(obj.getExpirationDate()));
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 }

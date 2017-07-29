@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public interface IGenDao <T, PK extends Serializable> {
 
-    T create(T obj) throws DaoExeption;
+    T create(T obj) throws DaoException;
 
-    T read(int key) throws DaoExeption;
+    T read(int key) throws DaoException;
 
-    ArrayList<T> readAll() throws DaoExeption;
+    ArrayList<T> readAll() throws DaoException;
 
-    boolean update(T obj) throws DaoExeption;
+    boolean update(T obj) throws DaoException;
 
-    boolean delete(T obj) throws DaoExeption;
+    boolean delete(T obj) throws DaoException;
 }

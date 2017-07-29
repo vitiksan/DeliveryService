@@ -1,7 +1,7 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
 
 import java.sql.Connection;
@@ -19,11 +19,6 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
         @Override
         protected void setId(int id) {
             super.setId(id);
-        }
-
-        @Override
-        protected void setAmount(double amount) {
-            super.setAmount(amount);
         }
     }
 
@@ -58,7 +53,7 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
-    public ArrayList<Transaction> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<Transaction> parsData(ResultSet rs) throws DaoException {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -72,13 +67,13 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
                 transactions.add(transaction);
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return null;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, Transaction obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, Transaction obj) throws DaoException {
         try {
             prSt.setInt(1,obj.getSenderAccountId());
             prSt.setString(2,obj.getRecipientCard());
@@ -86,19 +81,19 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
             prSt.setInt(4,obj.getOrderId());
             prSt.setInt(5, obj.getId());
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, Transaction obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, Transaction obj) throws DaoException {
         try {
             prSt.setInt(1,obj.getSenderAccountId());
             prSt.setString(2,obj.getRecipientCard());
             prSt.setDouble(3,obj.getAmount());
             prSt.setInt(4,obj.getOrderId());
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 }

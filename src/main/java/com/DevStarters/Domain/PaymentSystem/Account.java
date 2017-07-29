@@ -68,6 +68,15 @@ public class Account implements Identificator<Integer> {
         return false;
     }
 
+    public boolean getMoney(double money,int pass) {
+        boolean temp = checkPassword();
+        if (money <= this.balance && temp) {
+            this.balance -= money;
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Поповнення рахунку
      *
