@@ -4,8 +4,6 @@ import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Domain.PaymentSystem.Account;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class User implements Identificator<Integer> {
     private int id;

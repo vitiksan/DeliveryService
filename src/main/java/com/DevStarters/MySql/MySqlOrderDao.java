@@ -1,11 +1,10 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.Order.Order;
-import com.DevStarters.Domain.OrderLine;
+import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.Product;
-import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +64,7 @@ public class MySqlOrderDao extends AbstractDao<Order, Integer> {
     }
 
     @Override
-    public ArrayList<Order> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<Order> parsData(ResultSet rs) throws DaoException {
         ArrayList<Order> orders = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -105,31 +104,31 @@ public class MySqlOrderDao extends AbstractDao<Order, Integer> {
                 }
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return orders;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, Order obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, Order obj) throws DaoException {
         try {
             prSt.setInt(1, obj.getUserId());
             prSt.setDouble(2, obj.getPrice());
             prSt.setString(3, obj.getStatus());
             prSt.setInt(4, obj.getId());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, Order obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, Order obj) throws DaoException {
         try {
             prSt.setInt(1, obj.getUserId());
             prSt.setDouble(2, obj.getPrice());
             prSt.setString(3, obj.getStatus());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 }

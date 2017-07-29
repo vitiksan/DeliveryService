@@ -1,7 +1,7 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.ChainStore;
 
 import java.sql.Connection;
@@ -43,7 +43,7 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     }
 
     @Override
-    public ArrayList<ChainStore> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<ChainStore> parsData(ResultSet rs) throws DaoException {
         ArrayList<ChainStore> chainStores = new ArrayList<ChainStore>();
         try {
             while (rs.next()) {
@@ -58,13 +58,13 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
                chainStores.add(chainStore);
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return chainStores;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, ChainStore obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, ChainStore obj) throws DaoException {
         try {
           prSt.setString(1,obj.getName());
           prSt.setString(2,obj.getDescription());
@@ -74,12 +74,12 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
           prSt.setString(6,obj.getCardForPayments());
           prSt.setInt(7,obj.getId());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, ChainStore obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, ChainStore obj) throws DaoException {
         try {
             prSt.setString(1,obj.getName());
             prSt.setString(2,obj.getDescription());
@@ -88,7 +88,7 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
             prSt.setString(5,obj.getType());
             prSt.setString(6,obj.getCardForPayments());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 }

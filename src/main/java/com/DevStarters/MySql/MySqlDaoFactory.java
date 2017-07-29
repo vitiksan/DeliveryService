@@ -1,11 +1,11 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.DAO.DaoFactory;
 import com.DevStarters.Domain.ChainStore;
 import com.DevStarters.Domain.Order.Order;
-import com.DevStarters.Domain.OrderLine;
+import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
 import com.DevStarters.Domain.Product;
@@ -28,7 +28,7 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     private Map<Class, DaoCreator> allDao;
 
     @Override
-    public Connection getConnection() throws DaoExeption {
+    public Connection getConnection() throws DaoException {
         Connection connection = null;
         try {
             Class.forName(driverName); // Завантажуємо клас драйвера
@@ -48,10 +48,10 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     }
 
     @Override
-    public AbstractDao getDao(Connection connection, Class daoClass) throws DaoExeption {
+    public AbstractDao getDao(Connection connection, Class daoClass) throws DaoException {
         DaoCreator creator = allDao.get(daoClass);
         if (creator == null) {
-            throw new DaoExeption("DAO for class " + daoClass + " not found");
+            throw new DaoException("DAO for class " + daoClass + " not found");
         }
         return creator.create(connection);
     }
