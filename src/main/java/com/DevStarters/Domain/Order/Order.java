@@ -139,12 +139,12 @@ public class Order implements Identificator<Integer> {
             }
         } catch (DaoException daoException) {
             System.out.println("Error with send many :" + daoException.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void makeOrder(){
+    public boolean makeOrder() {
         addTransactions();
         try {
             DaoFactory factory = new MySqlDaoFactory();
@@ -154,10 +154,14 @@ public class Order implements Identificator<Integer> {
             if (!paid) throw new Exception("There isn`t enough money on the card");
             dao = factory.getDao(factory.getConnection(), Account.class);
             dao.update(user.getAccount());
+            status = "executed";
+            dao = factory.getDao(factory.getConnection(), Order.class);
+            dao.update(this);
             System.out.println("Transaction is completely");
+            return true;
         } catch (Exception e) {
             System.out.println("Error with making order :" + e.getMessage());
+            return false;
         }
-
     }
 }

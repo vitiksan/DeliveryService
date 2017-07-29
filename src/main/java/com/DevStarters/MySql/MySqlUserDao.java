@@ -84,13 +84,13 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id) WHERE user_id";
     }
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id);";
     }
 
@@ -102,7 +102,8 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO users VALUES (NULL,?,?,?,?,?,?);";
+        return "INSERT INTO users (user_name,user_surname,user_login,user_password,user_address," +
+                "user_born_date) VALUES (?,?,?,?,?,?);";
     }
 
     @Override

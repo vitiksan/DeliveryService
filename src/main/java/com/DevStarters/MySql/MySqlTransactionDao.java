@@ -44,7 +44,8 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO transactions VALUES (NULL,?,?,?,NOW(),?);";
+        return "INSERT INTO transactions (sender_account_id, recipient_card," +
+                "transaction_amount,transaction_time,order_id)VALUES (?,?,?,NOW(),?);";
     }
 
     @Override
