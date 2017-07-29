@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
+
     private class ExtendProduct extends Product {
         public ExtendProduct() {
             super();
