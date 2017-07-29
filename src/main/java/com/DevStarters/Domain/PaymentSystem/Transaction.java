@@ -52,7 +52,7 @@ public class Transaction implements Identificator<Integer> {
         return amount;
     }
 
-    protected void setAmount(double amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
