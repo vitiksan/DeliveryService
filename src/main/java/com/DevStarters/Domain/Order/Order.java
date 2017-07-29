@@ -23,7 +23,7 @@ public class Order implements Identificator<Integer> {
 
     public Order() {
         id = 0;
-        status = "none";
+        status = "not executed";
         userId = 0;
         price = 0;
         lines = new HashSet<OrderLine>();
