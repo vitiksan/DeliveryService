@@ -7,7 +7,6 @@ import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Domain.ChainStore;
 import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
-import com.DevStarters.Domain.User;
 import com.DevStarters.MySql.MySqlDaoFactory;
 
 import java.util.HashSet;
@@ -116,14 +115,12 @@ public class Order implements Identificator<Integer> {
         }
     }
 
-    public void addTransactions() {
+    public void addTransactions(Account account) {
         try {
             DaoFactory factory = new MySqlDaoFactory();
-            IGenDao dao = factory.getDao(factory.getConnection(), User.class);
-            User user = (User) dao.read(userId);
+            IGenDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
             for (OrderLine line : lines) {
                 boolean temp = false;
-                dao = factory.getDao(factory.getConnection(), ChainStore.class);
                 ChainStore shop = (ChainStore) dao.read(line.getProduct().getVendorId());
                 for (Transaction item : transactions) {
                     if (shop.getCardForPayments().equals(item.getRecipientCard())) {
@@ -133,7 +130,7 @@ public class Order implements Identificator<Integer> {
                     }
                 }
                 if (!temp) {
-                    transactions.add((Transaction) dao.create(new Transaction(user.getAccount().getId(),
+                    transactions.add((Transaction) dao.create(new Transaction(account.getId(),
                             shop.getCardForPayments(), line.getPrice())));
                 }
             }
@@ -144,16 +141,15 @@ public class Order implements Identificator<Integer> {
         }
     }
 
-    public boolean makeOrder() {
-        addTransactions();
+    public boolean makeOrder(Account account) {
+        addTransactions(account);
         try {
             DaoFactory factory = new MySqlDaoFactory();
-            IGenDao dao = factory.getDao(factory.getConnection(), User.class);
-            User user = (User) dao.read(userId);
-            boolean paid = user.getAccount().getMoney(price, user.getAccount().getPass());
-            if (!paid) throw new Exception("There isn`t enough money on the card");
-            dao = factory.getDao(factory.getConnection(), Account.class);
-            dao.update(user.getAccount());
+            IGenDao dao = factory.getDao(factory.getConnection(), Account.class);
+            boolean paid = account.getMoney(price);
+            if (!paid) throw new Exception("There isn`t enough money on the card or false password");
+            for (Transaction item : transactions) account.addTransaction(item);
+            dao.update(account);
             status = "executed";
             dao = factory.getDao(factory.getConnection(), Order.class);
             dao.update(this);

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
     private class ExtendAccount extends Account {
@@ -84,13 +85,13 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id) WHERE user_id";
     }
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id);";
     }
 
@@ -114,6 +115,8 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     @Override
     public ArrayList<User> parsData(ResultSet rs) throws DaoException {
         ArrayList<User> users = new ArrayList<User>();
+        HashSet<ExtendAccount> accounts = new HashSet<>();
+        boolean isAccount = false;
         boolean isUser = false;
         try {
             while (rs.next()) {
@@ -130,21 +133,28 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_password"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                account.addTransaction(transaction);
+                for (ExtendAccount account1: accounts){
+                    if (account.getId()==account1.getId()){
+                        account1.addTransaction(transaction);
+                    }
+                }
+                if (!isAccount){
+                    account.addTransaction(transaction);
+                    accounts.add(account);
+                }
 
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
                 user.setSurname(rs.getString("user_surname"));
                 user.setBornDate(rs.getDate("user_born_date").toLocalDate());
                 user.setAddress(rs.getString("user_address"));
-                user.setAccount(account);
-                for (User item : users) {
-                    if (item.getId() == user.getId()) {
-                        item.getAccount().addTransaction(user.getAccount().getTransactions().iterator().next());
-                        isUser = true;
+                for (User user1:users){
+                    if (user1.getId()==user.getId()){
+                        user1.getAccounts().addAll(accounts);
                     }
                 }
-                if (!isUser) {
+                if (!isUser){
+                    user.getAccounts().addAll(accounts);
                     users.add(user);
                 }
             }

@@ -13,6 +13,7 @@ public class Account implements Identificator<Integer> {
     private String cardNumber;
     private double balance;
     private int pass;
+    private int userId;
     private LocalDate expirationCardDate;
     private HashSet<Transaction> transactions = new HashSet<Transaction>();
 
@@ -20,11 +21,14 @@ public class Account implements Identificator<Integer> {
         this.cardNumber = CardNumberGenerator.generateVCNumber();
         balance = 0;
         pass = 0000;
+        userId = 0;
+        setExpCard();
     }
 
-    public Account(int userId,double balance, int pass) {
-        this.cardNumber = CardNumberGenerator.generateVCNumber();
-        this.balance = balance;
+    public Account(int userId, int pass) {
+        cardNumber = CardNumberGenerator.generateVCNumber();
+        balance = 0;
+        this.userId = userId;
         this.pass = pass;
         setExpCard();
     }
@@ -105,7 +109,6 @@ public class Account implements Identificator<Integer> {
         return (in.nextInt() == pass);
     }
 
-
     public void changePassword() throws Exception {
         Scanner in = new Scanner(System.in);
         boolean temp;
@@ -119,6 +122,14 @@ public class Account implements Identificator<Integer> {
                 repeatNewPass = in.nextInt();
             } while (newPass != repeatNewPass);
         }
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     private void setExpCard() {
