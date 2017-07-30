@@ -59,7 +59,7 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
-    public ArrayList<Transaction> parsData(ResultSet rs) throws DaoException {
+    public ArrayList<Transaction> parsData(ResultSet rs,boolean isJoin) throws DaoException {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             while (rs.next()) {

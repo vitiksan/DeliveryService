@@ -61,25 +61,28 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
     }
 
     @Override
-    public ArrayList<OrderLine> parsData(ResultSet rs) throws DaoException {
+    public ArrayList<OrderLine> parsData(ResultSet rs,boolean isJoin) throws DaoException {
         ArrayList<OrderLine> lines = new ArrayList<OrderLine>();
         try {
             while (rs.next()) {
                 OrderLine line = new OrderLine();
                 ExtendProduct product = new ExtendProduct();
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("product_name"));
-                product.setPrice(rs.getDouble("product_price"));
-                product.setDescription(rs.getString("product_description"));
-                product.setVendorId(rs.getInt("vendor_id"));
-                product.setProductionDate(rs.getDate("production_date").toLocalDate());
-                product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
-
                 line.setCount(rs.getInt("product_count"));
                 line.setId(rs.getInt("order_line_id"));
-                line.setProduct(product);
                 line.setPrice(rs.getDouble("order_line_price"));
                 line.setOrderId(rs.getInt("order_id"));
+
+                if (isJoin) {
+                    product.setId(rs.getInt("product_id"));
+                    product.setName(rs.getString("product_name"));
+                    product.setPrice(rs.getDouble("product_price"));
+                    product.setDescription(rs.getString("product_description"));
+                    product.setVendorId(rs.getInt("vendor_id"));
+                    product.setProductionDate(rs.getDate("production_date").toLocalDate());
+                    product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+
+                    line.setProduct(product);
+                }
                 lines.add(line);
             }
         } catch (Exception e) {

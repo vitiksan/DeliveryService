@@ -83,7 +83,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     }
 
     @Override
-    public ArrayList<Account> parsData(ResultSet rs) throws DaoException {
+    public ArrayList<Account> parsData(ResultSet rs,boolean isJoin) throws DaoException {
         ArrayList<Account> accounts = new ArrayList<Account>();
 
         try {

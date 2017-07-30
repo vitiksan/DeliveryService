@@ -118,7 +118,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public ArrayList<User> parsData(ResultSet rs) throws DaoException {
+    public ArrayList<User> parsData(ResultSet rs, boolean isJoin) throws DaoException {
         ArrayList<User> users = new ArrayList<User>();
         HashSet<ExtendAccount> accounts = new HashSet<>();
         boolean isAccount = false;
@@ -128,41 +128,48 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 ExtendUser user = new ExtendUser();
                 ExtendAccount account = new ExtendAccount();
                 ExtendTransaction transaction = new ExtendTransaction();
-                transaction.setId(rs.getInt("transaction_id"));
-                transaction.setSenderAccountId(rs.getInt("sender_account_id"));
-                transaction.setRecipientCard(rs.getString("recipient_card"));
-                transaction.setAmount(rs.getDouble("transaction_amount"));
-                transaction.setTransactionTime(((LocalDateTime) rs.getObject("transaction_time")));
-                account.setId(rs.getInt("account_id"));
-                account.setCardNumber(rs.getString("account_card_number"));
-                account.setBalance(rs.getDouble("account_balance"));
-                account.setPass(rs.getInt("account_password"));
-                account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                account.setUserId(rs.getInt("user_id"));
-                for (ExtendAccount account1: accounts){
-                    if (account.getId()==account1.getId()){
-                        account1.addTransaction(transaction);
-                    }
-                }
-                if (!isAccount){
-                    account.addTransaction(transaction);
-                    accounts.add(account);
-                }
 
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
                 user.setSurname(rs.getString("user_surname"));
+                user.setLogin(rs.getString("user_login"));
+                user.setPassword(rs.getString("user_password"));
                 user.setBornDate(rs.getDate("user_born_date").toLocalDate());
                 user.setAddress(rs.getString("user_address"));
-                for (User user1:users){
-                    if (user1.getId()==user.getId()){
-                        user1.getAccounts().addAll(accounts);
+
+                if (isJoin) {
+                    transaction.setId(rs.getInt("transaction_id"));
+                    transaction.setSenderAccountId(rs.getInt("sender_account_id"));
+                    transaction.setRecipientCard(rs.getString("recipient_card"));
+                    transaction.setAmount(rs.getDouble("transaction_amount"));
+                    transaction.setTransactionTime(((LocalDateTime) rs.getObject("transaction_time")));
+                    account.setId(rs.getInt("account_id"));
+                    account.setCardNumber(rs.getString("account_card_number"));
+                    account.setBalance(rs.getDouble("account_balance"));
+                    account.setPass(rs.getInt("account_password"));
+                    account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
+                    account.setUserId(rs.getInt("user_id"));
+                    for (ExtendAccount account1 : accounts) {
+                        if (account.getId() == account1.getId()) {
+                            account1.addTransaction(transaction);
+                        }
                     }
-                }
-                if (!isUser){
-                    user.getAccounts().addAll(accounts);
-                    users.add(user);
-                }
+                    if (!isAccount) {
+                        account.addTransaction(transaction);
+                        accounts.add(account);
+                    }
+
+
+                    for (User user1 : users) {
+                        if (user1.getId() == user.getId()) {
+                            user1.getAccounts().addAll(accounts);
+                        }
+                    }
+                    if (!isUser) {
+                        user.getAccounts().addAll(accounts);
+                        users.add(user);
+                    }
+                } else users.add(user);
             }
         } catch (Exception e) {
             throw new DaoException(e);

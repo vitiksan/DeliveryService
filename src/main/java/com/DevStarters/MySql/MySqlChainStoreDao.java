@@ -48,7 +48,7 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     }
 
     @Override
-    public ArrayList<ChainStore> parsData(ResultSet rs) throws DaoException {
+    public ArrayList<ChainStore> parsData(ResultSet rs,boolean isJoin) throws DaoException {
         ArrayList<ChainStore> chainStores = new ArrayList<ChainStore>();
         try {
             while (rs.next()) {
