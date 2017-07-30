@@ -133,6 +133,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_password"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
+                account.setUserId(rs.getInt("user_id"));
                 for (ExtendAccount account1: accounts){
                     if (account.getId()==account1.getId()){
                         account1.addTransaction(transaction);

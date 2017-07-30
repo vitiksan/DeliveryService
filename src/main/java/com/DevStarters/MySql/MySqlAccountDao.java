@@ -69,7 +69,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public String getCreateQuery() {
         return "INSERT INTO accounts (account_card_number,account_balance," +
-                "account_pass,account_expiration_date) VALUES(?,?,?,?,?)";
+                "account_pass,account_expiration_date, user_id) VALUES(?,?,?,?,?)";
     }
 
     @Override
@@ -115,6 +115,8 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
+            prSt.setDate(4,java.sql.Date.valueOf(obj.getExpirationCardDate()));
+            prSt.setInt(5,obj.getUserId());
         } catch (SQLException e) {
             throw new DaoException();
         }
