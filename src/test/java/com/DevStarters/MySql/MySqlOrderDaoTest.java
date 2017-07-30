@@ -26,7 +26,7 @@ public class MySqlOrderDaoTest {
     public void read() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
-        Order findOrder = (Order) dao.read(1);
+        Order findOrder = (Order) dao.read(5);
         assertNotNull(findOrder);
         System.out.println(findOrder.toString());
     }
@@ -43,7 +43,7 @@ public class MySqlOrderDaoTest {
     public void update() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
-        Order orders = (Order) dao.read(1);
+        Order orders = (Order) dao.read(5);
         orders.setStatus("waiting");
         dao.update(orders);
     }
@@ -52,7 +52,7 @@ public class MySqlOrderDaoTest {
     public void delete() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
-        Order order = (Order) dao.read(1);
+        Order order = (Order) dao.read(10);
         dao.delete(order);
     }
 

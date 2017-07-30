@@ -30,7 +30,7 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM order_lines ol JOIN product p USING(product_id) WHERE order_line_id=";
+        return "SELECT * FROM order_lines ol JOIN products p USING(product_id) WHERE order_line_id=";
     }
 
     @Override
@@ -40,13 +40,13 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM order_lines ol JOIN product p USING(product_id);";
+        return "SELECT * FROM order_lines ol JOIN products p USING(product_id);";
     }
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE order_lines SET product_id=?,product_count=?,order_line_price=?" +
-                "order_id=? WHERE order_line_id=";
+        return "UPDATE order_lines SET product_id=?,product_count=?,order_line_price=? " +
+                "WHERE order_line_id=?;";
     }
 
     @Override
@@ -97,8 +97,7 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
             prSt.setInt(1, obj.getProduct().getId());
             prSt.setInt(2, obj.getCount());
             prSt.setDouble(3, obj.getPrice());
-            prSt.setInt(4, obj.getOrderId());
-            prSt.setInt(5, obj.getId());
+            prSt.setInt(4, obj.getId());
         } catch (SQLException e) {
             throw new DaoException();
         }

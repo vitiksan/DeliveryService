@@ -55,7 +55,7 @@ public class MySqlOrderDao extends AbstractDao<Order, Integer> {
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE orders SET user_id=?,order_price=?,order_status=?";
+        return "UPDATE orders SET user_id=?,order_price=?,order_status=? WHERE order_id=?";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MySqlOrderDao extends AbstractDao<Order, Integer> {
 
     @Override
     public String getDeleteQuery() {
-        return "DELETE FROM orders WHERE order_id=;";
+        return "DELETE FROM orders WHERE order_id=?;";
     }
 
     @Override

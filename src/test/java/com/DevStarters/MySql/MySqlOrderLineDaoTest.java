@@ -19,7 +19,7 @@ public class MySqlOrderLineDaoTest {
         orderLine.setProduct((Product) daoProduct.read(1));
         orderLine.setCount(2);
         orderLine.setPrice(36);
-        orderLine.setOrderId(1);
+        orderLine.setOrderId(5);
         OrderLine getOrderLine = (OrderLine) dao.create(orderLine);
         assertNotNull(getOrderLine);
         System.out.println(getOrderLine.toString());
@@ -29,7 +29,7 @@ public class MySqlOrderLineDaoTest {
     public void read() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), OrderLine.class);
-        OrderLine findOrderLine = (OrderLine) dao.read(1);
+        OrderLine findOrderLine = (OrderLine) dao.read(2);
         assertNotNull(findOrderLine);
         System.out.println(findOrderLine.toString());
     }
@@ -46,7 +46,7 @@ public class MySqlOrderLineDaoTest {
     public void update() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), OrderLine.class);
-        OrderLine orderLine = (OrderLine) dao.read(1);
+        OrderLine orderLine = (OrderLine) dao.read(2);
         orderLine.setCount(3);
         orderLine.setPrice(54);
         dao.update(orderLine);
@@ -56,7 +56,7 @@ public class MySqlOrderLineDaoTest {
     public void delete() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), OrderLine.class);
-        OrderLine orderLine = (OrderLine) dao.read(1);
+        OrderLine orderLine = (OrderLine) dao.read(2);
         dao.delete(orderLine);
     }
 }
