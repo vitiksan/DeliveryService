@@ -1,8 +1,14 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.DAO.DaoFactory;
+import com.DevStarters.Domain.ChainStore;
+import com.DevStarters.Domain.Order.Order;
+import com.DevStarters.Domain.Order.OrderLine;
+import com.DevStarters.Domain.PaymentSystem.Account;
+import com.DevStarters.Domain.PaymentSystem.Transaction;
+import com.DevStarters.Domain.Product;
 import com.DevStarters.Domain.User;
 import org.apache.log4j.Logger;
 
@@ -22,9 +28,8 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     private Map<Class, DaoCreator> allDao;
 
     @Override
-    public Connection getConnection() throws DaoExeption {
+    public Connection getConnection() throws DaoException {
         Connection connection = null;
-
         try {
             Class.forName(driverName); // Завантажуємо клас драйвера
         } catch (ClassNotFoundException e) {
@@ -43,10 +48,10 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     }
 
     @Override
-    public AbstractDao getDao(Connection connection, Class daoClass) throws DaoExeption {
+    public AbstractDao getDao(Connection connection, Class daoClass) throws DaoException {
         DaoCreator creator = allDao.get(daoClass);
         if (creator == null) {
-            throw new DaoExeption("DAO for class " + daoClass + " not found");
+            throw new DaoException("DAO for class " + daoClass + " not found");
         }
         return creator.create(connection);
     }
@@ -58,7 +63,43 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
         allDao.put(User.class, new DaoCreator<Connection>() {
             @Override
             public AbstractDao create(Connection connection) {
-                return null;
+                return new MySqlUserDao(connection);
+            }
+        });
+        allDao.put(ChainStore.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlChainStoreDao(connection);
+            }
+        });
+        allDao.put(Order.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlOrderDao(connection);
+            }
+        });
+        allDao.put(OrderLine.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlOrderLineDao(connection);
+            }
+        });
+        allDao.put(Product.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlProductDao(connection);
+            }
+        });
+        allDao.put(Transaction.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlTransactionDao(connection);
+            }
+        });
+        allDao.put(Account.class, new DaoCreator<Connection>() {
+            @Override
+            public AbstractDao create(Connection connection) {
+                return new MySqlAccountDao(connection);
             }
         });
     }

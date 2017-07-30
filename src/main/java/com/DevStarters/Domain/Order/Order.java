@@ -1,48 +1,50 @@
 package com.DevStarters.Domain.Order;
 
+import com.DevStarters.DAO.DaoException;
+import com.DevStarters.DAO.DaoFactory;
+import com.DevStarters.DAO.IGenDao;
 import com.DevStarters.DAO.Identificator;
+import com.DevStarters.Domain.ChainStore;
+import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
+import com.DevStarters.Domain.User;
+import com.DevStarters.MySql.MySqlDaoFactory;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class Order implements Identificator<Integer>{
-
-    private int orderId;
+public class Order implements Identificator<Integer> {
+    private int id;
     private int userId;
     private HashSet<OrderLine> lines;
-    private LinkedList<Transaction>transactions;
+    private LinkedList<Transaction> transactions;
     private double price;
     private String status;
 
     public Order() {
-        orderId=0;
-        status="none";
-        userId=0;
-        price=0;
-        lines=new HashSet<>();
-        transactions=new LinkedList<>();
+        id = 0;
+        status = "not executed";
+        userId = 0;
+        price = 0;
+        lines = new HashSet<OrderLine>();
+        transactions = new LinkedList<>();
     }
 
     public Order(int userId) {
         this.userId = userId;
-        lines=new HashSet<>();
-        transactions=new LinkedList<>();
-        this.price=allPrice();
-        status="not executed";
+        lines = new HashSet<>();
+        transactions = new LinkedList<>();
+        this.price = allPrice();
+        status = "not executed";
     }
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getUserId() {
@@ -85,23 +87,81 @@ public class Order implements Identificator<Integer>{
         this.price = price;
     }
 
-    public double allPrice(){
-        double temp=0;
-        for(OrderLine line:lines){
-            temp+=line.getPrice();
+    public double allPrice() {
+        double temp = 0;
+        for (OrderLine line : lines) {
+            temp += line.getPrice();
         }
-        return  temp;
+        return temp;
     }
 
-    public void addNewLine(OrderLine line){
-        lines.add(line);
-        this.price=allPrice();
+    public void addNewLine(OrderLine line) {
+        boolean temp = false;
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            IGenDao dao = factory.getDao(factory.getConnection(), OrderLine.class);
+            for (OrderLine orderLine : lines) {
+                if (orderLine.getProduct().getId() == line.getProduct().getId()) {
+                    orderLine.setCount(orderLine.getCount() + line.getCount());
+                    dao.update(orderLine);
+                    temp = true;
+                }
+            }
+            if (!temp) lines.add((OrderLine) dao.create(line));
+            this.price = allPrice();
+            dao = factory.getDao(factory.getConnection(), Order.class);
+            dao.update(this);
+        } catch (DaoException e) {
+            System.out.println("Error with add new line to order :" + e.getMessage());
+        }
     }
 
-    public void addNewTransaction(OrderLine line){
-        for(Transaction transaction:transactions){
+    public void addTransactions() {
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            IGenDao dao = factory.getDao(factory.getConnection(), User.class);
+            User user = (User) dao.read(userId);
+            for (OrderLine line : lines) {
+                boolean temp = false;
+                dao = factory.getDao(factory.getConnection(), ChainStore.class);
+                ChainStore shop = (ChainStore) dao.read(line.getProduct().getVendorId());
+                for (Transaction item : transactions) {
+                    if (shop.getCardForPayments().equals(item.getRecipientCard())) {
+                        item.setAmount(item.getAmount() + line.getPrice());
+                        dao.update(item);
+                        temp = true;
+                    }
+                }
+                if (!temp) {
+                    transactions.add((Transaction) dao.create(new Transaction(user.getAccount().getId(),
+                            shop.getCardForPayments(), line.getPrice())));
+                }
+            }
+        } catch (DaoException daoException) {
+            System.out.println("Error with send many :" + daoException.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
-            //TODO
+    public boolean makeOrder() {
+        addTransactions();
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            IGenDao dao = factory.getDao(factory.getConnection(), User.class);
+            User user = (User) dao.read(userId);
+            boolean paid = user.getAccount().getMoney(price, user.getAccount().getPass());
+            if (!paid) throw new Exception("There isn`t enough money on the card");
+            dao = factory.getDao(factory.getConnection(), Account.class);
+            dao.update(user.getAccount());
+            status = "executed";
+            dao = factory.getDao(factory.getConnection(), Order.class);
+            dao.update(this);
+            System.out.println("Transaction is completely");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error with making order :" + e.getMessage());
+            return false;
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Account;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,12 +14,13 @@ import java.util.ArrayList;
 
 public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
+    private static final Logger log = Logger.getLogger(MySqlDaoFactory.class);
     public MySqlAccountDao(Connection connection) {
         super(connection);
     }
 
     private class AccountForDB extends Account {
-        public AccountForDB() throws DaoExeption{
+        public AccountForDB() throws DaoException {
         }
 
         public void setId(int id) {
@@ -44,11 +46,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
         protected void setExpirationCardDate(LocalDate expirationCardDate) {
             super.setExpirationCardDate(expirationCardDate);
         }
-
-        @Override
-        protected void setUserId(int userId) {
-            super.setUserId(userId);
-        }
     }
 
     @Override
@@ -66,13 +63,13 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public String getUpdateQuery() {
         return "UPDATE accounts SET account_card_number=?,account_balance=?," +
-                "account_pass=?, user_id=? WHERE account_id=?";
+                "account_pass=? WHERE account_id=?";
     }
 
     @Override
     public String getCreateQuery() {
         return "INSERT INTO accounts (account_card_number,account_balance," +
-                "account_pass,account_expiration_date,user_id) VALUES(?,?,?,?,?)";
+                "account_pass,account_expiration_date) VALUES(?,?,?,?,?)";
     }
 
     @Override
@@ -81,7 +78,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     }
 
     @Override
-    public ArrayList<Account> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<Account> parsData(ResultSet rs) throws DaoException {
         ArrayList<Account> accounts = new ArrayList<Account>();
 
         try {
@@ -92,37 +89,34 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_pass"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date").toLocalDate());
-                account.setUserId(rs.getInt("user_id"));
                 accounts.add(account);
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return accounts;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, Account obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, Account obj) throws DaoException {
         try {
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setInt(4,obj.getUserId());
-            prSt.setInt(5,obj.getId());
+            prSt.setInt(4,obj.getId());
         } catch (SQLException e) {
-           throw new DaoExeption();
+           throw new DaoException();
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, Account obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, Account obj) throws DaoException {
         try {
             prSt.setString(1,obj.getCardNumber());
             prSt.setDouble(2,obj.getBalance());
             prSt.setInt(3,obj.getPass());
-            prSt.setInt(4,obj.getUserId());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 }

@@ -4,8 +4,6 @@ import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Domain.PaymentSystem.Account;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class User implements Identificator<Integer> {
     private int id;
@@ -15,7 +13,7 @@ public class User implements Identificator<Integer> {
     private String password;
     private String address;
     private LocalDate bornDate;
-    private ArrayList<Account> accounts;
+    private Account account;
 
     public User() {
         name = "none";
@@ -24,7 +22,7 @@ public class User implements Identificator<Integer> {
         password = "1234";
         address = "none";
         bornDate = LocalDate.of(1900, 1, 5);
-        accounts = new ArrayList<>();
+        account = new Account();
     }
 
     public User(String name, String surname, String login, String password,
@@ -35,7 +33,7 @@ public class User implements Identificator<Integer> {
         this.password = password;
         this.address = address;
         bornDate = LocalDate.of(year, month, day);
-        accounts = new ArrayList<>();
+        account = new Account();
     }
 
     public int getId() {
@@ -46,12 +44,12 @@ public class User implements Identificator<Integer> {
         this.id = id;
     }
 
-    public ArrayList<Account> getAccounts() {
-        return accounts;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccounts(ArrayList<Account> accounts) {
-        this.accounts = accounts;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getName() {
@@ -100,31 +98,5 @@ public class User implements Identificator<Integer> {
 
     public void setBornDate(LocalDate bornDate) {
         this.bornDate = bornDate;
-    }
-
-    public void addAccount() {
-        accounts.add(new Account());
-    }
-
-    public void addAccount(double balance, int pass) {
-        accounts.add(new Account(this.id, balance, pass));
-    }
-
-    public Account deleteAccount() {
-        Scanner in = new Scanner(System.in);
-        Account temp = null;
-        int id;
-        for (Account account : accounts) {
-            System.out.println(account.toString());
-        }
-        System.out.println("Enter id of account which you want to delete: ");
-        id = Integer.parseInt(in.next());
-        for (Account account : accounts) {
-            if (id == account.getId()) {
-                temp = account;
-                accounts.remove(account);
-            }
-        }
-        return temp;
     }
 }

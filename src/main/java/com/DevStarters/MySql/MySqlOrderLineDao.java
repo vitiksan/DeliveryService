@@ -1,8 +1,8 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
-import com.DevStarters.Domain.OrderLine;
+import com.DevStarters.DAO.DaoException;
+import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.Product;
 
 import java.sql.Connection;
@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
+
     private class ExtendProduct extends Product {
         public ExtendProduct() {
             super();
@@ -55,7 +56,7 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
     }
 
     @Override
-    public ArrayList<OrderLine> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<OrderLine> parsData(ResultSet rs) throws DaoException {
         ArrayList<OrderLine> lines = new ArrayList<OrderLine>();
         try {
             while (rs.next()) {
@@ -68,20 +69,22 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
                 product.setVendorId(rs.getInt("vendor_id"));
                 product.setProductionDate(rs.getDate("production_date").toLocalDate());
                 product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+
                 line.setCount(rs.getInt("product_count"));
                 line.setId(rs.getInt("order_line_id"));
                 line.setProduct(product);
                 line.setPrice(rs.getDouble("order_line_price"));
                 line.setOrderId(rs.getInt("order_id"));
+                lines.add(line);
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return lines;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, OrderLine obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, OrderLine obj) throws DaoException {
         try {
             prSt.setInt(1, obj.getProduct().getId());
             prSt.setInt(2, obj.getCount());
@@ -89,19 +92,19 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
             prSt.setInt(4, obj.getOrderId());
             prSt.setInt(5, obj.getId());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, OrderLine obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, OrderLine obj) throws DaoException {
         try {
             prSt.setInt(1, obj.getProduct().getId());
             prSt.setInt(2, obj.getCount());
             prSt.setDouble(3, obj.getPrice());
             prSt.setInt(4, obj.getOrderId());
         } catch (SQLException e) {
-            throw new DaoExeption();
+            throw new DaoException();
         }
     }
 }

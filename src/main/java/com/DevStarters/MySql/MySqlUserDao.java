@@ -1,7 +1,7 @@
 package com.DevStarters.MySql;
 
 import com.DevStarters.DAO.AbstractDao;
-import com.DevStarters.DAO.DaoExeption;
+import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
 import com.DevStarters.Domain.User;
@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
     private class ExtendAccount extends Account {
@@ -23,11 +22,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         @Override
         protected void setExpirationCardDate(LocalDate expirationCardDate) {
             super.setExpirationCardDate(expirationCardDate);
-        }
-
-        @Override
-        protected void setUserId(int userId) {
-            super.setUserId(userId);
         }
 
         @Override
@@ -52,7 +46,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    private class ExtendUser extends User{
+    private class ExtendUser extends User {
         public ExtendUser() {
             super();
         }
@@ -73,7 +67,7 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    private class ExtendTransaction extends Transaction{
+    private class ExtendTransaction extends Transaction {
         public ExtendTransaction() {
             super();
         }
@@ -81,11 +75,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         @Override
         protected void setId(int id) {
             super.setId(id);
-        }
-
-        @Override
-        protected void setAmount(double amount) {
-            super.setAmount(amount);
         }
     }
 
@@ -95,13 +84,13 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id) WHERE user_id";
     }
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u JOIN accounts a USING(account_id) JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id);";
     }
 
@@ -113,7 +102,8 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO users VALUES (NULL,?,?,?,?,?,?);";
+        return "INSERT INTO users (user_name,user_surname,user_login,user_password,user_address," +
+                "user_born_date) VALUES (?,?,?,?,?,?);";
     }
 
     @Override
@@ -122,10 +112,8 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public ArrayList<User> parsData(ResultSet rs) throws DaoExeption {
+    public ArrayList<User> parsData(ResultSet rs) throws DaoException {
         ArrayList<User> users = new ArrayList<User>();
-        HashSet<ExtendAccount> accounts = new HashSet<>();
-        boolean isAccount = false;
         boolean isUser = false;
         try {
             while (rs.next()) {
@@ -142,62 +130,56 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_password"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                for (ExtendAccount account1: accounts){
-                    if (account.getId()==account1.getId()){
-                        account1.addTransaction(transaction);
-                    }
-                }
-                if (!isAccount){
-                    account.addTransaction(transaction);
-                    accounts.add(account);
-                }
+                account.addTransaction(transaction);
+
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
                 user.setSurname(rs.getString("user_surname"));
                 user.setBornDate(rs.getDate("user_born_date").toLocalDate());
                 user.setAddress(rs.getString("user_address"));
-                for (User user1:users){
-                    if (user1.getId()==user.getId()){
-                        user1.getAccounts().addAll(accounts);
+                user.setAccount(account);
+                for (User item : users) {
+                    if (item.getId() == user.getId()) {
+                        item.getAccount().addTransaction(user.getAccount().getTransactions().iterator().next());
+                        isUser = true;
                     }
                 }
-                if (!isUser){
-                    user.getAccounts().addAll(accounts);
+                if (!isUser) {
                     users.add(user);
                 }
             }
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
         return users;
     }
 
     @Override
-    public void parsUpdate(PreparedStatement prSt, User obj) throws DaoExeption {
+    public void parsUpdate(PreparedStatement prSt, User obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
             prSt.setString(3, obj.getLogin());
-            prSt.setString(4,obj.getPassword());
+            prSt.setString(4, obj.getPassword());
             prSt.setString(5, obj.getAddress());
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
             prSt.setInt(7, obj.getId());
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void parsInsert(PreparedStatement prSt, User obj) throws DaoExeption {
+    public void parsInsert(PreparedStatement prSt, User obj) throws DaoException {
         try {
             prSt.setString(1, obj.getName());
             prSt.setString(2, obj.getSurname());
             prSt.setString(3, obj.getLogin());
-            prSt.setString(4,obj.getPassword());
+            prSt.setString(4, obj.getPassword());
             prSt.setString(5, obj.getAddress());
             prSt.setDate(6, java.sql.Date.valueOf(obj.getBornDate()));
         } catch (Exception e) {
-            throw new DaoExeption(e);
+            throw new DaoException(e);
         }
     }
 }
