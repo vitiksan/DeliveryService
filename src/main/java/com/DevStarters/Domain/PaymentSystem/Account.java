@@ -20,6 +20,7 @@ public class Account implements Identificator<Integer> {
         this.cardNumber = CardNumberGenerator.generateVCNumber();
         balance = 0;
         pass = 0000;
+        setExpCard();
     }
 
     public Account(int userId,double balance, int pass) {
