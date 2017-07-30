@@ -52,7 +52,6 @@ public class Session {
         String password=in.nextLine();
         System.out.print("Enter your address: ");
         String address=in.nextLine();
-
         System.out.print("Enter your year of born: ");
         int year=Integer.parseInt(in.next());
         System.out.print("Enter yout month of born: ");
