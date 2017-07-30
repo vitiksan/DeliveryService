@@ -26,11 +26,6 @@ public class MySqlAccountDaoTest {
         }
 
         @Override
-        protected void setBalance(double balance) {
-            super.setBalance(balance);
-        }
-
-        @Override
         protected void setPass(int pass) {
             super.setPass(pass);
         }
@@ -46,6 +41,7 @@ public class MySqlAccountDaoTest {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
         Account account = new Account();
+        account.setUserId(1);
         Account getAccount = (Account) dao.create(account);
         assertNotNull(getAccount);
         System.out.println(getAccount.toString());
@@ -55,7 +51,7 @@ public class MySqlAccountDaoTest {
     public void read() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-        Account findAccount = (Account) dao.read(1);
+        Account findAccount = (Account) dao.read(2);
         assertNotNull(findAccount);
         System.out.println(findAccount.toString());
     }
@@ -72,7 +68,7 @@ public class MySqlAccountDaoTest {
     public void update() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-        ExtendAccount account = (ExtendAccount) dao.read(1);
+        Account account = (Account) dao.read(2);
         account.setBalance(256.3);
         dao.update(account);
     }
@@ -81,7 +77,7 @@ public class MySqlAccountDaoTest {
     public void delete() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-        Account account = (Account) dao.read(1);
+        Account account = (Account) dao.read(2);
         dao.delete(account);
     }
 }

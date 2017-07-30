@@ -53,7 +53,7 @@ public class Account implements Identificator<Integer> {
         return balance;
     }
 
-    protected void setBalance(double balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

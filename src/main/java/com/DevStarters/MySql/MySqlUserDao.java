@@ -37,11 +37,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
 
         @Override
-        protected void setBalance(double balance) {
-            super.setBalance(balance);
-        }
-
-        @Override
         protected void setPass(int pass) {
             super.setPass(pass);
         }
