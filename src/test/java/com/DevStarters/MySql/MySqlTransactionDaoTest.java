@@ -16,10 +16,11 @@ public class MySqlTransactionDaoTest {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Transaction.class);
         Transaction transaction = new Transaction();
-        transaction.setSenderAccountId(1);
+        transaction.setSenderAccountId(3);
         transaction.setAmount(2548.6);
         transaction.setTransactionTime(LocalDateTime.now());
-        transaction.setOrderId(1);
+        transaction.setOrderId(3);
+        transaction.setRecipientCard("1234756850486235");
         Transaction getTransaction = (Transaction) dao.create(transaction);
         assertNotNull(getTransaction);
         System.out.println(getTransaction.toString());
@@ -29,7 +30,7 @@ public class MySqlTransactionDaoTest {
     public void read() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Transaction.class);
-        Transaction findTransaction = (Transaction) dao.read(1);
+        Transaction findTransaction = (Transaction) dao.read(8);
         assertNotNull(findTransaction);
         System.out.println(findTransaction.toString());
     }
@@ -55,8 +56,7 @@ public class MySqlTransactionDaoTest {
     public void delete() throws Exception {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Transaction.class);
-        Transaction transaction = (Transaction) dao.read(1);
+        Transaction transaction = (Transaction) dao.read(8);
         dao.delete(transaction);
     }
-
 }

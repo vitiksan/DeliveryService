@@ -33,11 +33,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
         }
 
         @Override
-        protected void setBalance(double balance) {
-            super.setBalance(balance);
-        }
-
-        @Override
         protected void setPass(int pass) {
             super.setPass(pass);
         }
@@ -50,7 +45,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
     @Override
     public String getSelectQuery(){
-        return "SELECT * FROM accounts ac JOIN transaction tr " +
+        return "SELECT * FROM accounts ac JOIN transactions tr " +
                 "ON (tr.sender_account_id=ac.account_id) WHERE account_id=";
     }
 
@@ -61,7 +56,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM accounts ac JOIN transaction tr " +
+        return "SELECT * FROM accounts ac JOIN transactions tr " +
                 "ON (tr.sender_account_id=ac.account_id)";
     }
 
@@ -74,7 +69,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public String getCreateQuery() {
         return "INSERT INTO accounts (account_card_number,account_balance," +
-                "account_pass,account_expiration_date, user_id) VALUES(?,?,?,?,?)";
+                "account_pass,account_expiration_date_card, user_id) VALUES(?,?,?,?,?)";
     }
 
     @Override
@@ -93,7 +88,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
                 account.setCardNumber(rs.getString("account_card_number"));
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_pass"));
-                account.setExpirationCardDate(rs.getDate("account_expiration_date").toLocalDate());
+                account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
                 accounts.add(account);
             }
         } catch (Exception e) {

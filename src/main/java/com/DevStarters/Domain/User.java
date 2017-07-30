@@ -214,7 +214,6 @@ public class User implements Identificator<Integer> {
         } catch (DaoException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     public Order choiceOder() {
