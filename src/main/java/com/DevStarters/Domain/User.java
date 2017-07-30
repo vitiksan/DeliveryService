@@ -9,7 +9,6 @@ import com.DevStarters.MySql.MySqlDaoFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class User implements Identificator<Integer> {
