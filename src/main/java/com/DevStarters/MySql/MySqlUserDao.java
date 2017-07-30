@@ -86,7 +86,12 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     @Override
     public String getSelectQuery() {
         return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
-                "ON(a.account_id=t.sender_account_id) WHERE user_id";
+                "ON(a.account_id=t.sender_account_id) WHERE user_id=";
+    }
+
+    @Override
+    public String getSelectQueryWithoutJoin() {
+        return "SELECT * FROM users WHERE user_id=";
     }
 
     @Override

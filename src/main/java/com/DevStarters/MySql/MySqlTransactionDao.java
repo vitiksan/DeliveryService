@@ -32,6 +32,11 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
+    public String getSelectQueryWithoutJoin() {
+        return "SELECT * FROM transactions WHERE transaction_id=";
+    }
+
+    @Override
     public String getSelectAllQuery() {
         return "SELECT * FROM transactions;";
     }

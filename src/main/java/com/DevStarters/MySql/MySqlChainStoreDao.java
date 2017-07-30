@@ -21,6 +21,11 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     }
 
     @Override
+    public String getSelectQueryWithoutJoin() {
+        return "SELECT * FROM chain_stores WHERE chain_store_id=";
+    }
+
+    @Override
     public String getSelectAllQuery() {
         return "SELECT * FROM chain_stores;";
     }

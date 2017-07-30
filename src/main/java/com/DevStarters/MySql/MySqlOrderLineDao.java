@@ -30,7 +30,12 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM order_lines ol JOIN product p USING(product_id)WHERE order_line_id=";
+        return "SELECT * FROM order_lines ol JOIN product p USING(product_id) WHERE order_line_id=";
+    }
+
+    @Override
+    public String getSelectQueryWithoutJoin() {
+        return "SELECT * FROM order_lines WHERE order_line_id=";
     }
 
     @Override

@@ -8,14 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serializable> implements IGenDao<T,PK> {
+public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serializable> implements IGenDao<T, PK> {
     private Connection connection;
     private static final Logger log = Logger.getLogger(AbstractDao.class);
+
     public AbstractDao(Connection connection) {
         this.connection = connection;
     }
 
     public abstract String getSelectQuery();
+
+    public abstract String getSelectQueryWithoutJoin();
 
     public abstract String getSelectAllQuery();
 
@@ -41,7 +44,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             int count = prSt.executeUpdate();
             if (count != 1) throw new DaoException("Error. Created more then 1 object " + count);
         } catch (Exception e) {
-            log.error("Error with create object"+e.getMessage());
+            log.error("Error with create object" + e.getMessage());
             throw new DaoException(e);
         }
 
@@ -52,11 +55,16 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             ResultSet rs = prSt.executeQuery();
             ArrayList<T> someList = parsData(rs);
 
-            if (someList == null || someList.size() !=1)
-                throw new DaoException("Error with search created object by id");
+            if (someList == null || someList.size() != 1) {
+                query = getSelectQueryWithoutJoin() + "(SELECT last_insert_id());";
+                rs = prSt.executeQuery();
+                someList = parsData(rs);
+                if (someList == null || someList.size() != 1)
+                    throw new DaoException("Error with search created object by id");
+            }
             temp = someList.iterator().next();
         } catch (Exception e) {
-            log.error("Error with search object"+e.getMessage());
+            log.error("Error with search object" + e.getMessage());
             throw new DaoException(e);
         }
         return temp;
@@ -71,12 +79,21 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             prSt.setInt(1, id);
             ResultSet rs = prSt.executeQuery();
             someList = parsData(rs);
+
+            if (someList == null || someList.size() == 0) {
+                query = getSelectQueryWithoutJoin() + "?;";
+                prSt.setInt(1, id);
+                rs = prSt.executeQuery();
+                someList = parsData(rs);
+                if (someList == null || someList.size() == 0) {
+                    return null;
+                }
+            }
+
         } catch (Exception e) {
-            log.error("Error with read object"+e.getMessage());
+            log.error("Error with read object" + e.getMessage());
             throw new DaoException(e);
         }
-
-        if (someList == null || someList.size() == 0) return null;
 
         if (someList.size() > 1) {
             throw new DaoException("Отримано забато даних");
@@ -94,7 +111,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             ResultSet resultSet = prSt.executeQuery();
             someList = parsData(resultSet);
         } catch (Exception e) {
-            log.error("Error with read all object"+e.getMessage());
+            log.error("Error with read all object" + e.getMessage());
             throw new DaoException(e);
         }
         return someList;
@@ -110,7 +127,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             if (count != 1) throw new DaoException("Error. Modified more then 1 field " + count);
             else return true;
         } catch (Exception e) {
-            log.error("Error with update object"+e.getMessage());
+            log.error("Error with update object" + e.getMessage());
             throw new DaoException(e);
         }
     }
@@ -130,7 +147,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             if (count != 1) throw new DaoException("Error. Deleted more then 1 field " + count);
             else return true;
         } catch (Exception e) {
-            log.error("Error with delete object"+e.getMessage());
+            log.error("Error with delete object" + e.getMessage());
             throw new DaoException(e);
         }
     }

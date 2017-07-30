@@ -50,13 +50,18 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
     @Override
     public String getSelectQuery(){
-        return "Select * FROM accounts ac JOIN transaction tr " +
+        return "SELECT * FROM accounts ac JOIN transaction tr " +
                 "ON (tr.sender_account_id=ac.account_id) WHERE account_id=";
     }
 
     @Override
+    public String getSelectQueryWithoutJoin() {
+        return "SELECT * FROM accounts WHERE account_id=";
+    }
+
+    @Override
     public String getSelectAllQuery() {
-        return "Select * FROM accounts ac JOIN transaction tr " +
+        return "SELECT * FROM accounts ac JOIN transaction tr " +
                 "ON (tr.sender_account_id=ac.account_id)";
     }
 
