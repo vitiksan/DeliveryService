@@ -9,8 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
+public class MySqlChainStoreDao extends AbstractDao<ChainStore, Integer> {
     public MySqlChainStoreDao(Connection connection) {
         super(connection);
     }
@@ -48,19 +49,19 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     }
 
     @Override
-    public ArrayList<ChainStore> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<ChainStore> parsData(ResultSet rs, boolean isJoin) throws DaoException {
         ArrayList<ChainStore> chainStores = new ArrayList<ChainStore>();
         try {
             while (rs.next()) {
-               ChainStore chainStore=new ChainStore();
-               chainStore.setId(rs.getInt("chain_store_id"));
-               chainStore.setName(rs.getString("chain_store_name"));
-               chainStore.setDescription(rs.getString("chain_store_description"));
-               chainStore.setAddress(rs.getString("chain_store_address"));
-               chainStore.setKitchen(rs.getString("chain_store_kitchen"));
-               chainStore.setType(rs.getString("chain_store_type"));
-               chainStore.setCardForPayments(rs.getString("card_for_payments"));
-               chainStores.add(chainStore);
+                ChainStore chainStore = new ChainStore();
+                chainStore.setId(rs.getInt("chain_store_id"));
+                chainStore.setName(rs.getString("chain_store_name"));
+                chainStore.setDescription(rs.getString("chain_store_description"));
+                chainStore.setAddress(rs.getString("chain_store_address"));
+                chainStore.setKitchen(rs.getString("chain_store_kitchen"));
+                chainStore.setType(rs.getString("chain_store_type"));
+                chainStore.setCardForPayments(rs.getString("card_for_payments"));
+                chainStores.add(chainStore);
             }
         } catch (Exception e) {
             throw new DaoException(e);
@@ -71,13 +72,13 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     @Override
     public void parsUpdate(PreparedStatement prSt, ChainStore obj) throws DaoException {
         try {
-          prSt.setString(1,obj.getName());
-          prSt.setString(2,obj.getDescription());
-          prSt.setString(3,obj.getAddress());
-          prSt.setString(4,obj.getKitchen());
-          prSt.setString(5,obj.getType());
-          prSt.setString(6,obj.getCardForPayments());
-          prSt.setInt(7,obj.getId());
+            prSt.setString(1, obj.getName());
+            prSt.setString(2, obj.getDescription());
+            prSt.setString(3, obj.getAddress());
+            prSt.setString(4, obj.getKitchen());
+            prSt.setString(5, obj.getType());
+            prSt.setString(6, obj.getCardForPayments());
+            prSt.setInt(7, obj.getId());
         } catch (SQLException e) {
             throw new DaoException();
         }
@@ -86,14 +87,31 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore,Integer>{
     @Override
     public void parsInsert(PreparedStatement prSt, ChainStore obj) throws DaoException {
         try {
-            prSt.setString(1,obj.getName());
-            prSt.setString(2,obj.getDescription());
-            prSt.setString(3,obj.getAddress());
-            prSt.setString(4,obj.getKitchen());
-            prSt.setString(5,obj.getType());
-            prSt.setString(6,obj.getCardForPayments());
+            prSt.setString(1, obj.getName());
+            prSt.setString(2, obj.getDescription());
+            prSt.setString(3, obj.getAddress());
+            prSt.setString(4, obj.getKitchen());
+            prSt.setString(5, obj.getType());
+            prSt.setString(6, obj.getCardForPayments());
         } catch (SQLException e) {
             throw new DaoException();
         }
+    }
+
+    @Override
+    public ChainStore createWithField(int fKey) throws DaoException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter name of store: ");
+        String name = in.nextLine();
+        System.out.print("Enter description of store: ");
+        String description = in.nextLine();
+        System.out.print("Enter address of store: ");
+        String address = in.nextLine();
+        System.out.print("Enter kitchen of store: ");
+        String kitchen = in.nextLine();
+        System.out.println("Enter type of store: ");
+        String type = in.nextLine();
+        ChainStore tempChain = new ChainStore(name, description, address, kitchen, type);
+        return create(tempChain);
     }
 }

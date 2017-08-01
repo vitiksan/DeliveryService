@@ -3,6 +3,7 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -101,5 +102,10 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
         } catch (Exception e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public Transaction createWithField(int fKey) throws DaoException {
+        throw new NotImplementedException();
     }
 }

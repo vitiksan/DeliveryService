@@ -5,12 +5,14 @@ import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.Order.Order;
 import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.Product;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class MySqlOrderDao extends AbstractDao<Order, Integer> {
 
@@ -139,5 +141,10 @@ public class MySqlOrderDao extends AbstractDao<Order, Integer> {
         } catch (SQLException e) {
             throw new DaoException();
         }
+    }
+
+    @Override
+    public Order createWithField(int fKey) throws DaoException {
+        throw new NotImplementedException();
     }
 }

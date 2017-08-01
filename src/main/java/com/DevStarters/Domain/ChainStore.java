@@ -27,9 +27,8 @@ public class ChainStore implements Identificator<Integer> {
         products = new HashSet<>();
     }
 
-    public ChainStore(int id, String name, String description, String address,
+    public ChainStore(String name, String description, String address,
                       String kitchen,String type) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.address = address;

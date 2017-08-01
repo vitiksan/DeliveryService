@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
     private class ExtendAccount extends Account {
@@ -199,5 +200,28 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         } catch (Exception e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public User createWithField(int fKey) throws DaoException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter name: ");
+        String name = in.nextLine();
+        System.out.print("Enter surname: ");
+        String surname = in.nextLine();
+        System.out.print("Enter login: ");
+        String login = in.nextLine();
+        System.out.print("Enter password: ");
+        String password = in.nextLine();
+        System.out.print("Enter address: ");
+        String address = in.nextLine();
+        System.out.print("Enter year of born: ");
+        int year = Integer.parseInt(in.next());
+        System.out.print("Enter month of born: ");
+        int month = Integer.parseInt(in.next());
+        System.out.print("Enter day of born: ");
+        int day = Integer.parseInt(in.next());
+        User tempUser = new User(name, surname, login, password, address, year, month, day);
+        return create(tempUser);
     }
 }
