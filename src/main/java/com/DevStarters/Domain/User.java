@@ -172,7 +172,7 @@ public class User implements Identificator<Integer> {
                 }
             }
         } catch (DaoException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
