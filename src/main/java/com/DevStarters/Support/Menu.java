@@ -1,4 +1,4 @@
-package com.DevStarters.Support;// Created by on 18.07.2017.
+package com.DevStarters.Support;
 
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
