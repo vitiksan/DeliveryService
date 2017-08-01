@@ -17,22 +17,24 @@ public class Product implements Identificator<Integer> {
     public Product() {
         name = "none";
         price = 0;
-        vendorId =0;
+        vendorId = 0;
         productionDate = LocalDate.now();
         expirationDate = LocalDate.now();
     }
 
-    public Product(String name, double price, int vendorId, Period periodOfValidity) {
+    public Product(String name, double price, String description, int vendorId, Period periodOfValidity) {
         this.name = name;
         this.price = price;
+        this.description = description;
         this.vendorId = vendorId;
         productionDate = LocalDate.now();
         expirationDate = productionDate.plus(periodOfValidity);
     }
 
-    public Product(String name, double price, int vendorId, LocalDate productionDate, LocalDate expirationDate) {
+    public Product(String name, double price, String description, int vendorId, LocalDate productionDate, LocalDate expirationDate) {
         this.name = name;
         this.price = price;
+        this.description = description;
         this.vendorId = vendorId;
         this.productionDate = productionDate;
         this.expirationDate = expirationDate;

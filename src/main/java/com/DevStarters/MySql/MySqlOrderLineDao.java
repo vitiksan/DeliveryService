@@ -4,6 +4,7 @@ import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.Product;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -113,5 +114,10 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
         } catch (SQLException e) {
             throw new DaoException();
         }
+    }
+
+    @Override
+    public OrderLine createWithField(int fKey) throws DaoException {
+        throw new NotImplementedException();
     }
 }

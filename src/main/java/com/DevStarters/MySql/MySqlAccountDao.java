@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
@@ -18,6 +19,7 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     public MySqlAccountDao(Connection connection) {
         super(connection);
     }
+
 
     private class AccountForDB extends Account {
         public AccountForDB() throws DaoException {
@@ -120,5 +122,19 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
         } catch (SQLException e) {
             throw new DaoException();
         }
+    }
+
+    @Override
+    public Account createWithField(int fKey) throws DaoException {
+        Scanner in=new Scanner(System.in);
+        System.out.println("Enter card number: ");
+        String cardNumber=in.nextLine();
+        System.out.print("Enter balance: ");
+        double balance=in.nextDouble();
+        System.out.print("Enter card password: ");
+        int pass=Integer.parseInt(in.next());
+        Account tempAccount=new Account(fKey,pass);
+        tempAccount.setBalance(balance);
+        return create(tempAccount);
     }
 }
