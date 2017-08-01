@@ -216,17 +216,19 @@ public class User implements Identificator<Integer> {
         Scanner in = new Scanner(System.in);
         boolean isOrder = false;
         Order temp = null;
-        for (Order order : orders) System.out.println(order.toString());
-        do {
-            System.out.print("Enter id order do you want to add product for: ");
-            int orderId = in.nextInt();
-            for (Order order : orders) {
-                if (order.getId() == orderId && !order.getStatus().equals("executed")) {
-                    temp = order;
+        if (orders.size() > 0) {
+            for (Order order : orders) System.out.println(order.toString());
+            do {
+                System.out.print("Enter id order do you want to add product for: ");
+                int orderId = in.nextInt();
+                for (Order order : orders) {
+                    if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                        temp = order;
+                    }
                 }
-            }
-            if (!isOrder) System.out.println("Not found this order or this order`s executed");
-        } while (!isOrder);
+                if (!isOrder) System.out.println("Not found this order or this order`s executed");
+            } while (!isOrder);
+        } else System.out.println("You have not orders");
         return temp;
     }
 

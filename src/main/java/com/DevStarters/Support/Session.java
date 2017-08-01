@@ -12,13 +12,22 @@ import java.util.Scanner;
 public class Session {
     private static User currentUser = null;
 
-    public static void login() throws DaoException {
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void login() {
         Scanner in = new Scanner(System.in);
         String login;
         String password;
-        MySqlDaoFactory factory = new MySqlDaoFactory();
-        AbstractDao dao = factory.getDao(factory.getConnection(), User.class);
-        ArrayList<User> users = dao.readAll();
+        ArrayList<User> users = null;
+        try {
+            MySqlDaoFactory factory = new MySqlDaoFactory();
+            AbstractDao dao = factory.getDao(factory.getConnection(), User.class);
+            users = dao.readAll();
+        } catch (DaoException e) {
+            System.out.println("Error with connect to DB" + e.getMessage());
+        }
         System.out.print("Enter your login: ");
         login = in.nextLine();
         System.out.print("Enter your password: ");
@@ -34,36 +43,40 @@ public class Session {
         System.out.println("Account not found. Do you want try again? 1-Login, 2-Register, 0-Exit");
         int choice = Integer.parseInt(in.next());
         if (choice == 1) login();
-        if(choice==2) register();
-        if(choice==0) logOut();
+        if (choice == 2) register();
+        if (choice == 0) logOut();
     }
 
-    public static void register() throws DaoException {
+    public static void register() {
         MySqlDaoFactory factory = new MySqlDaoFactory();
-        AbstractDao dao = factory.getDao(factory.getConnection(), User.class);
-        Scanner in=new Scanner(System.in);
-        System.out.print("Enter your name: ");
-        String name=in.nextLine();
-        System.out.print("Enter your surname: ");
-        String surname=in.nextLine();
-        System.out.print("Enter your login: ");
-        String login=in.nextLine();
-        System.out.print("Enter your password: ");
-        String password=in.nextLine();
-        System.out.print("Enter your address: ");
-        String address=in.nextLine();
-        System.out.print("Enter your year of born: ");
-        int year=Integer.parseInt(in.next());
-        System.out.print("Enter yout month of born: ");
-        int month=Integer.parseInt(in.next());
-        System.out.print("Enter your day of born: ");
-        int day=Integer.parseInt(in.next());
+        try {
+            AbstractDao dao = factory.getDao(factory.getConnection(), User.class);
+            Scanner in = new Scanner(System.in);
+            System.out.print("Enter your name: ");
+            String name = in.nextLine();
+            System.out.print("Enter your surname: ");
+            String surname = in.nextLine();
+            System.out.print("Enter your login: ");
+            String login = in.nextLine();
+            System.out.print("Enter your password: ");
+            String password = in.nextLine();
+            System.out.print("Enter your address: ");
+            String address = in.nextLine();
+            System.out.print("Enter your year of born: ");
+            int year = Integer.parseInt(in.next());
+            System.out.print("Enter your month of born: ");
+            int month = Integer.parseInt(in.next());
+            System.out.print("Enter your day of born: ");
+            int day = Integer.parseInt(in.next());
 
-        User user=new User(name,surname,login,password,address,year,month,day);
-        currentUser = (User) dao.create(user);
+            User user = new User(name, surname, login, password, address, year, month, day);
+            currentUser = (User) dao.create(user);
+        } catch (DaoException e) {
+            System.out.println("Error with register" + e.getMessage());
+        }
     }
 
-    public static void logOut(){
-        currentUser=null;
+    public static void logOut() {
+        currentUser = null;
     }
 }
