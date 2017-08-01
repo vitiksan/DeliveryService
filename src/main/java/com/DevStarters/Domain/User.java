@@ -149,11 +149,7 @@ public class User implements Identificator<Integer> {
 
     public void deleteAccount() {
         Scanner in = new Scanner(System.in);
-        for (Account account : accounts) {
-            System.out.println(account.toString());
-        }
-        System.out.print("Enter account`s card number which you want to delete :");
-        String card = in.nextLine();
+        String card = choiceAccount().getCardNumber();
         DaoFactory factory = new MySqlDaoFactory();
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
