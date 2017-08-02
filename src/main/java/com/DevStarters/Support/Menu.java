@@ -37,7 +37,8 @@ public class Menu {
             System.out.println("8-Edit profile");
             System.out.println("9-Logout");
         }
-        if (Session.getCurrentUser().getLogin().contentEquals("admin")) {
+        if (Session.getCurrentUser().getLogin().contentEquals("admin")
+                || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
             System.out.println("10-Add new chain store");
             System.out.println("11-Add product to chain store");
             System.out.println("12-Delete product from chain store");
@@ -165,21 +166,96 @@ public class Menu {
 
     private static void editProfile() {
 
+        System.out.println("You can:");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     private static void addChainStore() {
-
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
+            ChainStore shop = (ChainStore) dao.createWithField(0);
+            if (shop == null) throw new DaoException();
+        } catch (DaoException e) {
+            System.out.println("Error with create chain store: " + e.getMessage());
+        }
     }
 
     private static void addProduct() {
-
+        Scanner in = new Scanner(System.in);
+        boolean temp = false;
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
+            ArrayList<ChainStore> shops = dao.readAll();
+            dao = factory.getDao(factory.getConnection(), Product.class);
+            for (ChainStore item : shops) System.out.println(item.toString());
+            System.out.println("Enter chain store`s id you want to add product to");
+            int id = in.nextInt();
+            for (ChainStore item : shops) {
+                if (item.getId() == id) {
+                    Product product = (Product) dao.createWithField(id);
+                    if (product == null) throw new DaoException("Error with create product");
+                    temp = true;
+                }
+            }
+            if (!temp) throw new DaoException("Not found chain store");
+        } catch (DaoException e) {
+            System.out.println("Error with add product: " + e.getMessage());
+        }
     }
 
     private static void deleteChainStore() {
-
+        Scanner in = new Scanner(System.in);
+        boolean temp = false;
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
+            ArrayList<ChainStore> shops = dao.readAll();
+            for (ChainStore item : shops) System.out.println(item.toString());
+            System.out.println("Enter chain store`s id which you want to delete");
+            int id = in.nextInt();
+            for (ChainStore item : shops) {
+                if (item.getId() == id) {
+                    dao.delete(item);
+                    temp = true;
+                }
+            }
+            if (!temp) throw new DaoException("Not found chain store");
+        } catch (DaoException e) {
+            System.out.println("Error with delete chain store: " + e.getMessage());
+        }
     }
 
     private static void deleteProduct() {
-
+        Scanner in = new Scanner(System.in);
+        boolean temp = false;
+        try {
+            DaoFactory factory = new MySqlDaoFactory();
+            AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
+            ArrayList<ChainStore> shops = dao.readAll();
+            ArrayList<Product> products = null;
+            dao = factory.getDao(factory.getConnection(), Product.class);
+            for (ChainStore item : shops) System.out.println(item.toString());
+            System.out.println("Enter chain store`s id you want to delete product from: ");
+            int id = in.nextInt();
+            for (Product item : products) {
+                if (item.getVendorId() == id) System.out.println(item.toString());
+            }
+            System.out.println("Enter product`s id which you want to delete");
+            int prId = in.nextInt();
+            for (Product item : products) {
+                if (item.getId() == prId) {
+                    dao.delete(item);
+                    temp = true;
+                }
+            }
+            if (!temp) throw new DaoException("Not found product");
+        } catch (DaoException e) {
+            System.out.println("Error with delete product: " + e.getMessage());
+        }
     }
 }
