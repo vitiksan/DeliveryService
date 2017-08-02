@@ -16,7 +16,7 @@ public class Menu {
     private static int choose = -1;
 
     public static void main(String[] args) {
-        System.out.println("Welcome to shop");
+        System.out.println("Welcome to the shop");
         do {
             information();
             choose = chooses();
@@ -25,7 +25,7 @@ public class Menu {
     }
 
     private static void information() {
-        System.out.println("You can:");
+        System.out.println("You can: ");
         System.out.println("1-Login");
         System.out.println("2-Register");
         if (!Session.getCurrentUser().equals(null)) {
@@ -51,15 +51,15 @@ public class Menu {
         int temp = -1;
         do {
             try {
-                System.out.print("Please enter your choices: ");
+                System.out.print("Enter your choice, please: ");
                 temp = Integer.parseInt(in.next());
                 if ((Session.getCurrentUser().getLogin().contentEquals("admin") && temp > 13)
                         || temp > 9) {
                     throw new Exception();
                 }
             } catch (Exception e) {
-                System.out.println("Your choices not defined");
-                log.error("Your choices not defined");
+                System.out.println("Your choice  undefined");
+                log.error("Your choice undefined");
                 log.error(e.getMessage());
                 temp = -1;
             }
