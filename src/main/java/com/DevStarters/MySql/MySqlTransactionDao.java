@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
 
     private class ExtendTransaction extends Transaction{
+
         public ExtendTransaction() {
             super();
         }
