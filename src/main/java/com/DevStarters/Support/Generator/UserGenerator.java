@@ -25,15 +25,30 @@ public class UserGenerator {
 
             String login = "";
             for (int i = 0; i < random.nextInt(7) + 5; i++) {
-                login += new Character((char) (random.nextInt(57) + 65)).toString();
+                int x = 47;
+                do {
+                    x = (random.nextInt(124));
+                } while (!((x > 64 && x < 91) || (x > 96 && x < 123) || (x > 47 && x < 58)));
+                login += new Character((char) x).toString();
             }
             String pass = "";
             for (int i = 0; i < 8; i++) {
-                pass += new Character((char) (random.nextInt(126))).toString();
+                int x = 47;
+                do {
+                    x = (random.nextInt(124));
+                } while (!((x > 64 && x < 91) || (x > 96 && x < 123) || (x > 47 && x < 58)));
+                pass += new Character((char) x).toString();
             }
             int year = random.nextInt(117) + 1900;
-            int month = random.nextInt(11);
-            int day = random.nextInt(31);
+            int month = 0;
+            do{
+                month=random.nextInt(12) % 12;
+            }while (month<1 || month>12);
+            int day=0;
+            do{
+                day = random.nextInt(31) % 31;
+            }while (day<1 || day>31);
+
             User user = new User(readFile("name"), readFile("surname"), login, pass,
                     "вул. " + readFile("surname"), year, month, day);
             users.add((User) dao.create(user));
