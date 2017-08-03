@@ -127,8 +127,6 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public Account createWithField(int fKey) throws DaoException {
         Scanner in=new Scanner(System.in);
-        System.out.println("Enter card number: ");
-        String cardNumber=in.nextLine();
         System.out.print("Enter balance: ");
         double balance=in.nextDouble();
         System.out.print("Enter card password: ");
