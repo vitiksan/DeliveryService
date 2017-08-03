@@ -92,7 +92,7 @@ public class Menu {
                 Session.getCurrentUser().addProductToOrder();
                 break;
             case 8:
-                editProfile();
+                EditProfile.edit();
                 break;
             case 9:
                 Session.logOut();
@@ -162,15 +162,6 @@ public class Menu {
         } catch (DaoException e) {
             System.out.println("Error with read DB");
         }
-    }
-
-    private static void editProfile() {
-
-        System.out.println("You can:");
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
     }
 
     private static void addChainStore() {

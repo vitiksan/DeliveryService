@@ -54,11 +54,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
 
         @Override
-        protected void setPassword(String password) {
-            super.setPassword(password);
-        }
-
-        @Override
         protected void setLogin(String login) {
             super.setLogin(login);
         }

@@ -97,7 +97,7 @@ public class User implements Identificator<Integer> {
         return password;
     }
 
-    protected void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
