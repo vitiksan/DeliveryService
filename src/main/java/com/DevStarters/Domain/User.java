@@ -182,14 +182,22 @@ public class User implements Identificator<Integer> {
         Account temp = null;
         for (Order order : orders) System.out.println(order.toString());
         do {
-            System.out.print("Enter id account: ");
-            int accountId = in.nextInt();
-            for (Account account : accounts) {
-                if (account.getId() == accountId) {
-                    temp = account;
+            try {
+                System.out.print("Enter id account: ");
+                int accountId = in.nextInt();
+                for (Account account : accounts) {
+                    if (account.getId() == accountId) {
+                        temp = account;
+                    }
                 }
+                if (!isAccount) throw new Exception("Not found this account, try again");
+            } catch (NumberFormatException nfe) {
+                System.out.println(nfe.getMessage());
+                isAccount = false;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                isAccount = false;
             }
-            if (!isAccount) System.out.println("Not found this account");
         } while (!isAccount);
         return temp;
     }
@@ -219,14 +227,19 @@ public class User implements Identificator<Integer> {
         if (orders.size() > 0) {
             for (Order order : orders) System.out.println(order.toString());
             do {
-                System.out.print("Enter id order do you want to add product for: ");
-                int orderId = in.nextInt();
-                for (Order order : orders) {
-                    if (order.getId() == orderId && !order.getStatus().equals("executed")) {
-                        temp = order;
+                try {
+                    System.out.print("Enter id order do you want to add product for: ");
+                    int orderId = in.nextInt();
+                    for (Order order : orders) {
+                        if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                            temp = order;
+                        }
                     }
+                    if (!isOrder) System.out.println("Not found this order or this order`s executed");
+                } catch (NumberFormatException nfe) {
+                    System.out.println(nfe.getMessage());
+                    isOrder=false;
                 }
-                if (!isOrder) System.out.println("Not found this order or this order`s executed");
             } while (!isOrder);
         } else System.out.println("You have not orders");
         return temp;
@@ -254,6 +267,8 @@ public class User implements Identificator<Integer> {
             }
         } catch (DaoException e) {
             System.out.println(e.getMessage());
+        } catch (NumberFormatException nfe) {
+            System.out.println(nfe.getMessage());
         }
     }
 
