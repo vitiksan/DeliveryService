@@ -1,8 +1,7 @@
-package com.DevStarters.Support;
+package com.DevStarters.Util;
 
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
-import com.DevStarters.Domain.Product;
 import com.DevStarters.Domain.User;
 import com.DevStarters.MySql.MySqlDaoFactory;
 
