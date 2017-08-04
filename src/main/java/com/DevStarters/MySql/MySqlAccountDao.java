@@ -3,6 +3,7 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Account;
+import com.DevStarters.Domain.PaymentSystem.Transaction;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -13,9 +14,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class MySqlAccountDao extends AbstractDao<Account,Integer>{
+public class MySqlAccountDao extends AbstractDao<Account, Integer> {
 
     private static final Logger log = Logger.getLogger(MySqlDaoFactory.class);
+
     public MySqlAccountDao(Connection connection) {
         super(connection);
     }
@@ -45,20 +47,26 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
         }
     }
 
+    private class TransactionForDB extends Transaction {
+        public TransactionForDB() {
+            super();
+        }
+
+        @Override
+        protected void setId(int id) {
+            super.setId(id);
+        }
+    }
+
     @Override
-    public String getSelectQuery(){
-        return "SELECT * FROM accounts ac JOIN transactions tr " +
+    public String getSelectQuery() {
+        return "SELECT * FROM accounts ac LEFT JOIN transactions tr " +
                 "ON (tr.sender_account_id=ac.account_id) WHERE account_id=";
     }
 
     @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM accounts WHERE account_id=";
-    }
-
-    @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM accounts ac JOIN transactions tr " +
+        return "SELECT * FROM accounts ac LEFT JOIN transactions tr " +
                 "ON (tr.sender_account_id=ac.account_id)";
     }
 
@@ -80,18 +88,41 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     }
 
     @Override
-    public ArrayList<Account> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<Account> parsData(ResultSet rs) throws DaoException {
         ArrayList<Account> accounts = new ArrayList<Account>();
 
         try {
             while (rs.next()) {
                 AccountForDB account = new AccountForDB();
+                TransactionForDB transaction = new TransactionForDB();
+                boolean isAccount = false;
+
+                if (rs.getTimestamp("transaction_time") != null) {
+                    transaction.setId(rs.getInt("transaction_id"));
+                    transaction.setSenderAccountId(rs.getInt("sender_account_id"));
+                    transaction.setRecipientCard(rs.getString("recipient_card"));
+                    transaction.setAmount(rs.getDouble("transaction_amount"));
+                    transaction.setTransactionTime(rs.getTimestamp("transaction_time").toLocalDateTime());
+                }
+
                 account.setId(rs.getInt("account_id"));
                 account.setCardNumber(rs.getString("account_card_number"));
                 account.setBalance(rs.getDouble("account_balance"));
                 account.setPass(rs.getInt("account_pass"));
                 account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                accounts.add(account);
+
+                if (transaction.getId() != 0) {
+                    for (Account item : accounts) {
+                        if (account.getId() == item.getId()) {
+                            account.addTransaction(transaction);
+                            isAccount = true;
+                        }
+                    }
+                    if (!isAccount){
+                        account.addTransaction(transaction);
+                        accounts.add(account);
+                    }
+                } else accounts.add(account);
             }
         } catch (Exception e) {
             throw new DaoException(e);
@@ -102,23 +133,23 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
     @Override
     public void parsUpdate(PreparedStatement prSt, Account obj) throws DaoException {
         try {
-            prSt.setString(1,obj.getCardNumber());
-            prSt.setDouble(2,obj.getBalance());
-            prSt.setInt(3,obj.getPass());
-            prSt.setInt(4,obj.getId());
+            prSt.setString(1, obj.getCardNumber());
+            prSt.setDouble(2, obj.getBalance());
+            prSt.setInt(3, obj.getPass());
+            prSt.setInt(4, obj.getId());
         } catch (SQLException e) {
-           throw new DaoException();
+            throw new DaoException();
         }
     }
 
     @Override
     public void parsInsert(PreparedStatement prSt, Account obj) throws DaoException {
         try {
-            prSt.setString(1,obj.getCardNumber());
-            prSt.setDouble(2,obj.getBalance());
-            prSt.setInt(3,obj.getPass());
-            prSt.setDate(4,java.sql.Date.valueOf(obj.getExpirationCardDate()));
-            prSt.setInt(5,obj.getUserId());
+            prSt.setString(1, obj.getCardNumber());
+            prSt.setDouble(2, obj.getBalance());
+            prSt.setInt(3, obj.getPass());
+            prSt.setDate(4, java.sql.Date.valueOf(obj.getExpirationCardDate()));
+            prSt.setInt(5, obj.getUserId());
         } catch (SQLException e) {
             throw new DaoException();
         }
@@ -126,12 +157,12 @@ public class MySqlAccountDao extends AbstractDao<Account,Integer>{
 
     @Override
     public Account createWithField(int fKey) throws DaoException {
-        Scanner in=new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
         System.out.print("Enter balance: ");
-        double balance=in.nextDouble();
+        double balance = in.nextDouble();
         System.out.print("Enter card password: ");
-        int pass=Integer.parseInt(in.next());
-        Account tempAccount=new Account(fKey,pass);
+        int pass = Integer.parseInt(in.next());
+        Account tempAccount = new Account(fKey, pass);
         tempAccount.setBalance(balance);
         return create(tempAccount);
     }

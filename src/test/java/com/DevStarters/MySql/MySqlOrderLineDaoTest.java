@@ -19,7 +19,7 @@ public class MySqlOrderLineDaoTest {
         orderLine.setProduct((Product) daoProduct.read(1));
         orderLine.setCount(2);
         orderLine.setPrice(36);
-        orderLine.setOrderId(5);
+        orderLine.setOrderId(24);
         OrderLine getOrderLine = (OrderLine) dao.create(orderLine);
         assertNotNull(getOrderLine);
         System.out.println(getOrderLine.toString());

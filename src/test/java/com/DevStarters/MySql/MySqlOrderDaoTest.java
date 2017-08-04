@@ -14,7 +14,7 @@ public class MySqlOrderDaoTest {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
         Order order = new Order();
-        order.setUserId(1);
+        order.setUserId(2);
         order.setPrice(18);
         order.setStatus("not executed");
         Order getorder = (Order) dao.create(order);

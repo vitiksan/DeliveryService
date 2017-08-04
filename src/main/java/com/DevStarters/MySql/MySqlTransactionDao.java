@@ -35,11 +35,6 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM transactions WHERE transaction_id=";
-    }
-
-    @Override
     public String getSelectAllQuery() {
         return "SELECT * FROM transactions;";
     }
@@ -62,7 +57,7 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
-    public ArrayList<Transaction> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<Transaction> parsData(ResultSet rs) throws DaoException {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             while (rs.next()) {
