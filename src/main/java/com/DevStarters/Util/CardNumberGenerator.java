@@ -1,4 +1,4 @@
-package com.DevStarters.Support;
+package com.DevStarters.Util;
 
 import java.util.Date;
 import java.util.Random;

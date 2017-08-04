@@ -1,7 +1,7 @@
 package com.DevStarters.Domain.PaymentSystem;
 
 import com.DevStarters.DAO.Identificator;
-import com.DevStarters.Support.CardNumberGenerator;
+import com.DevStarters.Util.CardNumberGenerator;
 
 import java.time.LocalDate;
 import java.time.Period;

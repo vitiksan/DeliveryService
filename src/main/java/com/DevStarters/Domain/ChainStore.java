@@ -1,8 +1,7 @@
 package com.DevStarters.Domain;
 
 import com.DevStarters.DAO.Identificator;
-import com.DevStarters.Support.CardNumberGenerator;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
+import com.DevStarters.Util.CardNumberGenerator;
 
 import java.util.HashSet;
 import java.util.Scanner;

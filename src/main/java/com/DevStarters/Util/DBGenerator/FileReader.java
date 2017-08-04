@@ -1,4 +1,4 @@
-package com.DevStarters.Support.Generator;
+package com.DevStarters.Util.DBGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;

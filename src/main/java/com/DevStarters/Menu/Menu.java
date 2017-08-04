@@ -1,4 +1,4 @@
-package com.DevStarters.Support;
+package com.DevStarters.Menu;
 
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
@@ -6,6 +6,7 @@ import com.DevStarters.DAO.DaoFactory;
 import com.DevStarters.Domain.ChainStore;
 import com.DevStarters.Domain.Product;
 import com.DevStarters.MySql.MySqlDaoFactory;
+import com.DevStarters.Util.Session;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
