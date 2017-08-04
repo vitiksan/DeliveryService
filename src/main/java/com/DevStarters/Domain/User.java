@@ -265,4 +265,15 @@ public class User implements Identificator<Integer> {
             if (order.getId() == orderId) order.makeOrder(accountForPayment);
         }
     }
+
+    @Override
+    public String toString() {
+        return "User: " +
+                "\nName='" + name +
+                "\nSurname='" + surname +
+                "\nLogin='" + login +
+                "\nAddress='" + address +
+                "\nBornDate=" + bornDate.getDayOfMonth() + "."
+                + bornDate.getMonth() + "." + bornDate.getYear();
+    }
 }

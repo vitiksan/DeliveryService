@@ -118,4 +118,17 @@ public class Product implements Identificator<Integer> {
         result = 31 * result + vendorId;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Product: " +
+                "\nName: " + name +
+                "\nPrice: " + price +
+                "\nDescription: " + description +
+                "\nVendor id: " + vendorId +
+                "\nProduction date: " + productionDate.getDayOfMonth() + "."
+                + productionDate.getMonth() + "." + productionDate.getYear() +
+                "\nExpiration date: " + +expirationDate.getDayOfMonth() + "."
+                + expirationDate.getMonth() + "." + expirationDate.getYear();
+    }
 }

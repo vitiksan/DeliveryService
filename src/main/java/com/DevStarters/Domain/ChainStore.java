@@ -125,4 +125,15 @@ public class ChainStore implements Identificator<Integer> {
         boolean temp = products.remove(product);
         return (temp) ? product : null;
     }
+
+    @Override
+    public String toString() {
+        return "ChainStore: " +
+                "\nName: " + name +
+                "\nDescription: " + description +
+                "\nAddress: " + address +
+                "\nKitchen: " + kitchen +
+                "\nType: " + type +
+                "\nCard for payments: " + cardForPayments;
+    }
 }

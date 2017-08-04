@@ -159,4 +159,14 @@ public class Account implements Identificator<Integer> {
     public void setTransactions(HashSet<Transaction> transactions) {
         this.transactions = transactions;
     }
+
+    @Override
+    public String toString() {
+        return "Account: " +
+                "\nCard number: " + cardNumber +
+                "\nBalance: " + balance +
+                "\nUser id: " + userId +
+                "\nExpiration card date: " + expirationCardDate.getDayOfMonth()+"."
+                +expirationCardDate.getMonth()+"."+expirationCardDate.getYear();
+    }
 }

@@ -160,4 +160,12 @@ public class Order implements Identificator<Integer> {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Order: " +
+                "\nUser id: " + userId +
+                "\nPrice: " + price +
+                "\nStatus: " + status;
+    }
 }
