@@ -2,6 +2,7 @@ package com.DevStarters.Domain;
 
 import com.DevStarters.DAO.Identificator;
 import com.DevStarters.Support.CardNumberGenerator;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import java.util.HashSet;
 import java.util.Scanner;
@@ -22,18 +23,18 @@ public class ChainStore implements Identificator<Integer> {
         description = "none";
         address = "none";
         kitchen = "none";
-        type="none";
+        type = "none";
         this.cardForPayments = CardNumberGenerator.generateVCNumber();
         products = new HashSet<>();
     }
 
     public ChainStore(String name, String description, String address,
-                      String kitchen,String type) {
+                      String kitchen, String type) {
         this.name = name;
         this.description = description;
         this.address = address;
         this.kitchen = kitchen;
-        this.type=type;
+        this.type = type;
         this.cardForPayments = CardNumberGenerator.generateVCNumber();
         products = new HashSet<>();
     }
@@ -110,13 +111,22 @@ public class ChainStore implements Identificator<Integer> {
         Scanner in = new Scanner(System.in);
         Product temp = null;
         for (Product product : products) {
-            System.out.println("Enter id of product which you want to delete: ");
+            System.out.println(product.toString());
         }
-        int id = Integer.parseInt(in.next());
-        for (Product product : products) {
-            if (id == product.getId()) {
-                temp = product;
+        try {
+            System.out.println("Enter id of product which you want to delete: ");
+            int id = Integer.parseInt(in.next());
+            for (Product product : products) {
+                if (id == product.getId()) {
+                    temp = product;
+                }
             }
+            if (temp == null) throw new Exception("Not found this id");
+        } catch (NumberFormatException nfe) {
+            id = 0;
+            System.out.println("Error with input id: " + nfe.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return temp;
     }

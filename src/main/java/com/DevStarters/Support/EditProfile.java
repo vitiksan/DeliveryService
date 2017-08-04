@@ -69,21 +69,21 @@ public class EditProfile {
                 updateUser();
                 break;
             case 3:
-                System.out.println("Enter current password");
+                System.out.println("Enter current password: ");
                 String pass = in.nextLine();
                 if (Session.getCurrentUser().getPassword().equals(pass)) {
-                    System.out.println("Enter new password");
+                    System.out.println("Enter new password: ");
                     String newPass = in.nextLine();
-                    System.out.println("Repeat new password");
+                    System.out.println("Repeat new password: ");
                     String repeat = in.nextLine();
                     if (newPass.equals(repeat)) {
                         Session.getCurrentUser().setPassword(newPass);
                         updateUser();
-                    } else System.out.println("New password isn`t equals repeat new password");
+                    } else System.out.println("New password isn`t equals with repeat new password");
                 } else System.out.println("False current password");
                 break;
             case 4:
-                System.out.println("Enter new address");
+                System.out.println("Enter new address: ");
                 String address = in.nextLine();
                 Session.getCurrentUser().setAddress(address);
                 updateUser();
@@ -93,15 +93,15 @@ public class EditProfile {
                 int month = 0;
                 int day = 0;
                 do {
-                    System.out.println("Enter year of born");
+                    System.out.println("Enter year of born: ");
                     year = in.nextInt();
                 } while (year < 1920 || year > LocalDate.now().getYear());
                 do {
-                    System.out.println("Enter month of born");
+                    System.out.println("Enter month of born: ");
                     month = in.nextInt();
                 } while (month < 1 || month > 12);
                 do {
-                    System.out.println("Enter day of born");
+                    System.out.println("Enter day of born: ");
                     day = in.nextInt();
                 } while (day < 1 || day > 31);
                 Session.getCurrentUser().setBornDate(LocalDate.of(year, month, day));

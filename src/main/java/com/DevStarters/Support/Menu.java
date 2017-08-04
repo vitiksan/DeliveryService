@@ -184,7 +184,7 @@ public class Menu {
             ArrayList<ChainStore> shops = dao.readAll();
             dao = factory.getDao(factory.getConnection(), Product.class);
             for (ChainStore item : shops) System.out.println(item.toString());
-            System.out.println("Enter chain store`s id you want to add product to");
+            System.out.println("Enter chain store`s id you want to add product to: ");
             int id = in.nextInt();
             for (ChainStore item : shops) {
                 if (item.getId() == id) {
@@ -207,7 +207,7 @@ public class Menu {
             AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
             ArrayList<ChainStore> shops = dao.readAll();
             for (ChainStore item : shops) System.out.println(item.toString());
-            System.out.println("Enter chain store`s id which you want to delete");
+            System.out.println("Enter chain store`s id which you want to delete: ");
             int id = in.nextInt();
             for (ChainStore item : shops) {
                 if (item.getId() == id) {
@@ -236,7 +236,7 @@ public class Menu {
             for (Product item : products) {
                 if (item.getVendorId() == id) System.out.println(item.toString());
             }
-            System.out.println("Enter product`s id which you want to delete");
+            System.out.println("Enter product`s id which you want to delete: ");
             int prId = in.nextInt();
             for (Product item : products) {
                 if (item.getId() == prId) {

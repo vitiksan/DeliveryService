@@ -105,8 +105,13 @@ public class Account implements Identificator<Integer> {
 
     public boolean checkPassword() {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter password: ");
-        return (in.nextInt() == pass);
+        try {
+            System.out.println("Enter password: ");
+            return (in.nextInt() == pass);1
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     public void changePassword() throws Exception {
