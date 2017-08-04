@@ -4,11 +4,13 @@ import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.Order.OrderLine;
 import com.DevStarters.Domain.Product;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
@@ -30,17 +32,12 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM order_lines ol JOIN products p USING(product_id) WHERE order_line_id=";
-    }
-
-    @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM order_lines WHERE order_line_id=";
+        return "SELECT * FROM order_lines ol LEFT JOIN products p USING(product_id) WHERE order_line_id=";
     }
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM order_lines ol JOIN products p USING(product_id);";
+        return "SELECT * FROM order_lines ol LEFT JOIN products p USING(product_id);";
     }
 
     @Override
@@ -61,28 +58,27 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
     }
 
     @Override
-    public ArrayList<OrderLine> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<OrderLine> parsData(ResultSet rs) throws DaoException {
         ArrayList<OrderLine> lines = new ArrayList<OrderLine>();
         try {
             while (rs.next()) {
                 OrderLine line = new OrderLine();
                 ExtendProduct product = new ExtendProduct();
+
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("product_name"));
+                product.setPrice(rs.getDouble("product_price"));
+                product.setDescription(rs.getString("product_description"));
+                product.setVendorId(rs.getInt("vendor_id"));
+                product.setProductionDate(rs.getDate("production_date").toLocalDate());
+                product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+
                 line.setCount(rs.getInt("product_count"));
                 line.setId(rs.getInt("order_line_id"));
                 line.setPrice(rs.getDouble("order_line_price"));
                 line.setOrderId(rs.getInt("order_id"));
+                line.setProduct(product);
 
-                if (isJoin) {
-                    product.setId(rs.getInt("product_id"));
-                    product.setName(rs.getString("product_name"));
-                    product.setPrice(rs.getDouble("product_price"));
-                    product.setDescription(rs.getString("product_description"));
-                    product.setVendorId(rs.getInt("vendor_id"));
-                    product.setProductionDate(rs.getDate("production_date").toLocalDate());
-                    product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
-
-                    line.setProduct(product);
-                }
                 lines.add(line);
             }
         } catch (Exception e) {
@@ -113,5 +109,10 @@ public class MySqlOrderLineDao extends AbstractDao<OrderLine, Integer> {
         } catch (SQLException e) {
             throw new DaoException();
         }
+    }
+
+    @Override
+    public OrderLine createWithField(int fKey) throws DaoException {
+        throw new NotImplementedException();
     }
 }

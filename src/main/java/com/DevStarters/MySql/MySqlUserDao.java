@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 
 public class MySqlUserDao extends AbstractDao<User, Integer> {
     private class ExtendAccount extends Account {
@@ -53,11 +54,6 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         }
 
         @Override
-        protected void setPassword(String password) {
-            super.setPassword(password);
-        }
-
-        @Override
         protected void setLogin(String login) {
             super.setLogin(login);
         }
@@ -80,18 +76,13 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u LEFT JOIN accounts a USING(user_id) LEFT JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id) WHERE user_id=";
     }
 
     @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM users WHERE user_id=";
-    }
-
-    @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM users u JOIN accounts a USING(user_id) JOIN transactions t " +
+        return "SELECT * FROM users u LEFT JOIN accounts a USING(user_id) LEFT JOIN transactions t " +
                 "ON(a.account_id=t.sender_account_id);";
     }
 
@@ -113,16 +104,45 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public ArrayList<User> parsData(ResultSet rs, boolean isJoin) throws DaoException {
+    public ArrayList<User> parsData(ResultSet rs) throws DaoException {
         ArrayList<User> users = new ArrayList<User>();
-        HashSet<ExtendAccount> accounts = new HashSet<>();
-        boolean isAccount = false;
-        boolean isUser = false;
         try {
             while (rs.next()) {
+                boolean isAccount = false;
+                boolean isUser = false;
                 ExtendUser user = new ExtendUser();
                 ExtendAccount account = new ExtendAccount();
                 ExtendTransaction transaction = new ExtendTransaction();
+
+                if (rs.getTimestamp("transaction_time") != null) {
+                    transaction.setId(rs.getInt("transaction_id"));
+                    transaction.setSenderAccountId(rs.getInt("sender_account_id"));
+                    transaction.setRecipientCard(rs.getString("recipient_card"));
+                    transaction.setAmount(rs.getDouble("transaction_amount"));
+                    transaction.setTransactionTime(rs.getTimestamp("transaction_time").toLocalDateTime());
+                }
+                if (rs.getDate("account_expiration_date_card") != null) {
+                    account.setId(rs.getInt("account_id"));
+                    account.setCardNumber(rs.getString("account_card_number"));
+                    account.setBalance(rs.getDouble("account_balance"));
+                    account.setPass(rs.getInt("account_pass"));
+                    account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
+                    account.setUserId(rs.getInt("user_id"));
+                }
+
+                if (account.getId() != 0) {
+                    for (Account account1 : user.getAccounts()) {
+                        if (account.getId() == account1.getId()) {
+                            if (transaction.getId() != 0)
+                                account1.addTransaction(transaction);
+                            isAccount = true;
+                        }
+                    }
+                    if (!isAccount) {
+                        if (transaction.getId() != 0)
+                            account.addTransaction(transaction);
+                    }
+                }
 
                 user.setId(rs.getInt("user_id"));
                 user.setName(rs.getString("user_name"));
@@ -132,39 +152,18 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
                 user.setBornDate(rs.getDate("user_born_date").toLocalDate());
                 user.setAddress(rs.getString("user_address"));
 
-                if (isJoin) {
-                    transaction.setId(rs.getInt("transaction_id"));
-                    transaction.setSenderAccountId(rs.getInt("sender_account_id"));
-                    transaction.setRecipientCard(rs.getString("recipient_card"));
-                    transaction.setAmount(rs.getDouble("transaction_amount"));
-                    transaction.setTransactionTime(((LocalDateTime) rs.getObject("transaction_time")));
-                    account.setId(rs.getInt("account_id"));
-                    account.setCardNumber(rs.getString("account_card_number"));
-                    account.setBalance(rs.getDouble("account_balance"));
-                    account.setPass(rs.getInt("account_password"));
-                    account.setExpirationCardDate(rs.getDate("account_expiration_date_card").toLocalDate());
-                    account.setUserId(rs.getInt("user_id"));
-                    for (ExtendAccount account1 : accounts) {
-                        if (account.getId() == account1.getId()) {
-                            account1.addTransaction(transaction);
+                for (User user1 : users) {
+                    if (user1.getId() == user.getId()) {
+                        if (account.getId() != 0) {
+                            user1.addAccount(account);
                         }
                     }
-                    if (!isAccount) {
-                        account.addTransaction(transaction);
-                        accounts.add(account);
-                    }
-
-
-                    for (User user1 : users) {
-                        if (user1.getId() == user.getId()) {
-                            user1.getAccounts().addAll(accounts);
-                        }
-                    }
-                    if (!isUser) {
-                        user.getAccounts().addAll(accounts);
-                        users.add(user);
-                    }
-                } else users.add(user);
+                }
+                if (!isUser) {
+                    if (account.getId() != 0)
+                        user.addAccount(account);
+                    users.add(user);
+                }
             }
         } catch (Exception e) {
             throw new DaoException(e);
@@ -199,5 +198,28 @@ public class MySqlUserDao extends AbstractDao<User, Integer> {
         } catch (Exception e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public User createWithField(int fKey) throws DaoException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter name: ");
+        String name = in.nextLine();
+        System.out.print("Enter surname: ");
+        String surname = in.nextLine();
+        System.out.print("Enter login: ");
+        String login = in.nextLine();
+        System.out.print("Enter password: ");
+        String password = in.nextLine();
+        System.out.print("Enter address: ");
+        String address = in.nextLine();
+        System.out.print("Enter year of born: ");
+        int year = Integer.parseInt(in.next());
+        System.out.print("Enter month of born: ");
+        int month = Integer.parseInt(in.next());
+        System.out.print("Enter day of born: ");
+        int day = Integer.parseInt(in.next());
+        User tempUser = new User(name, surname, login, password, address, year, month, day);
+        return create(tempUser);
     }
 }

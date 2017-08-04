@@ -71,4 +71,15 @@ public class Transaction implements Identificator<Integer> {
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction: " +
+                "\nSender account id: " + senderAccountId +
+                "\nRecipient card: " + recipientCard +
+                "\nAmount: " + amount +
+                "\nTransaction time: " + transactionTime.getDayOfMonth()+"."+
+                transactionTime.getMonth()+"."+transactionTime.getYear()+
+                "\nOrder id: " + orderId;
+    }
 }

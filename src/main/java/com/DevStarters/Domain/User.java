@@ -97,7 +97,7 @@ public class User implements Identificator<Integer> {
         return password;
     }
 
-    protected void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -172,7 +172,7 @@ public class User implements Identificator<Integer> {
                 }
             }
         } catch (DaoException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -264,5 +264,16 @@ public class User implements Identificator<Integer> {
         for (Order order : orders) {
             if (order.getId() == orderId) order.makeOrder(accountForPayment);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "User: " +
+                "\nName='" + name +
+                "\nSurname='" + surname +
+                "\nLogin='" + login +
+                "\nAddress='" + address +
+                "\nBornDate=" + bornDate.getDayOfMonth() + "."
+                + bornDate.getMonth() + "." + bornDate.getYear();
     }
 }

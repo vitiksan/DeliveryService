@@ -3,6 +3,7 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.PaymentSystem.Transaction;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
+
     private class ExtendTransaction extends Transaction{
+
         public ExtendTransaction() {
             super();
         }
@@ -28,11 +31,6 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM transactions WHERE transaction_id=";
-    }
-
-    @Override
-    public String getSelectQueryWithoutJoin() {
         return "SELECT * FROM transactions WHERE transaction_id=";
     }
 
@@ -59,7 +57,7 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
     }
 
     @Override
-    public ArrayList<Transaction> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<Transaction> parsData(ResultSet rs) throws DaoException {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -101,5 +99,10 @@ public class MySqlTransactionDao extends AbstractDao<Transaction,Integer> {
         } catch (Exception e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public Transaction createWithField(int fKey) throws DaoException {
+        throw new NotImplementedException();
     }
 }

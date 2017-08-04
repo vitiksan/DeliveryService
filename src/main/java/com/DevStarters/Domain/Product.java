@@ -17,22 +17,24 @@ public class Product implements Identificator<Integer> {
     public Product() {
         name = "none";
         price = 0;
-        vendorId =0;
+        vendorId = 0;
         productionDate = LocalDate.now();
         expirationDate = LocalDate.now();
     }
 
-    public Product(String name, double price, int vendorId, Period periodOfValidity) {
+    public Product(String name, double price, String description, int vendorId, Period periodOfValidity) {
         this.name = name;
         this.price = price;
+        this.description = description;
         this.vendorId = vendorId;
         productionDate = LocalDate.now();
         expirationDate = productionDate.plus(periodOfValidity);
     }
 
-    public Product(String name, double price, int vendorId, LocalDate productionDate, LocalDate expirationDate) {
+    public Product(String name, double price, String description, int vendorId, LocalDate productionDate, LocalDate expirationDate) {
         this.name = name;
         this.price = price;
+        this.description = description;
         this.vendorId = vendorId;
         this.productionDate = productionDate;
         this.expirationDate = expirationDate;
@@ -115,5 +117,18 @@ public class Product implements Identificator<Integer> {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + vendorId;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product: " +
+                "\nName: " + name +
+                "\nPrice: " + price +
+                "\nDescription: " + description +
+                "\nVendor id: " + vendorId +
+                "\nProduction date: " + productionDate.getDayOfMonth() + "."
+                + productionDate.getMonth() + "." + productionDate.getYear() +
+                "\nExpiration date: " + +expirationDate.getDayOfMonth() + "."
+                + expirationDate.getMonth() + "." + expirationDate.getYear();
     }
 }

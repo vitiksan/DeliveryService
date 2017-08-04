@@ -60,4 +60,13 @@ public class OrderLine implements Identificator<Integer>{
     public void setCount(int count) {
         this.count = count;
     }
+
+    @Override
+    public String toString() {
+        return "OrderLine: " +
+                "\nOrder id: " + orderId +
+                "\nProduct: " + product.toString() +
+                "\nPrice: " + price +
+                "\nCount: " + count;
+    }
 }

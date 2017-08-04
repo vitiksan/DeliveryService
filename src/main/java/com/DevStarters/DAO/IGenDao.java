@@ -7,6 +7,8 @@ public interface IGenDao <T, PK extends Serializable> {
 
     T create(T obj) throws DaoException;
 
+    T createWithField(int fKey)throws DaoException;
+
     T read(int key) throws DaoException;
 
     ArrayList<T> readAll() throws DaoException;

@@ -7,7 +7,9 @@ import com.DevStarters.Domain.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class MySqlProductDao extends AbstractDao<Product, Integer> {
 
@@ -28,11 +30,6 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM products WHERE product_id=";
-    }
-
-    @Override
-    public String getSelectQueryWithoutJoin() {
         return "SELECT * FROM products WHERE product_id=";
     }
 
@@ -59,7 +56,7 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
     }
 
     @Override
-    public ArrayList<Product> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<Product> parsData(ResultSet rs) throws DaoException {
         ArrayList<Product> products = new ArrayList<Product>();
         try {
             while (rs.next()) {
@@ -106,5 +103,33 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
         } catch (Exception e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public Product createWithField(int fKey) throws DaoException {
+        Scanner in=new Scanner(System.in);
+        System.out.println("Enter name of product: ");
+        String name= in.nextLine();
+        System.out.print("Enter price of product: ");
+        double price=in.nextDouble();
+        System.out.println("Enter description of product: ");
+        String description= in.nextLine();
+        System.out.print("Enter production year of product: ");
+        int year=Integer.parseInt(in.next());
+        System.out.print("Enter production month of product: ");
+        int month=Integer.parseInt(in.next());
+        System.out.print("Enter production day of product: ");
+        int day=Integer.parseInt(in.next());
+        LocalDate productionDate=LocalDate.of(year,month,day);
+        System.out.print("Enter expiration year of product: ");
+        int expYear=Integer.parseInt(in.next());
+        System.out.print("Enter expiration month of product: ");
+        int expMonth=Integer.parseInt(in.next());
+        System.out.print("Enter expiration day of product: ");
+        int expDay=Integer.parseInt(in.next());
+        LocalDate expirationDate=LocalDate.of(expYear,expMonth,expDay);
+        Product tempProduct=new Product(name,price,description,fKey,productionDate,expirationDate);
+
+        return create(tempProduct);
     }
 }
