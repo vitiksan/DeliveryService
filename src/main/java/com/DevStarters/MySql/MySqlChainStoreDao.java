@@ -3,6 +3,7 @@ package com.DevStarters.MySql;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.ChainStore;
+import com.DevStarters.Domain.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,19 +17,25 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore, Integer> {
         super(connection);
     }
 
-    @Override
-    public String getSelectQuery() {
-        return "SELECT * FROM chain_stores WHERE chain_store_id=";
+    private class ExtendsProduct extends Product {
+        public ExtendsProduct() {
+            super();
+        }
+
+        @Override
+        protected void setId(int id) {
+            super.setId(id);
+        }
     }
 
     @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM chain_stores WHERE chain_store_id=";
+    public String getSelectQuery() {
+        return "SELECT * FROM chain_stores chs LEFT JOIN products p ON(chs.chain_store_id=p.vendor_id) WHERE chain_store_id=";
     }
 
     @Override
     public String getSelectAllQuery() {
-        return "SELECT * FROM chain_stores;";
+        return "SELECT * FROM chain_stores chs LEFT JOIN products p ON(chs.chain_store_id=p.vendor_id);";
     }
 
     @Override
@@ -49,11 +56,24 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore, Integer> {
     }
 
     @Override
-    public ArrayList<ChainStore> parsData(ResultSet rs, boolean isJoin) throws DaoException {
+    public ArrayList<ChainStore> parsData(ResultSet rs) throws DaoException {
         ArrayList<ChainStore> chainStores = new ArrayList<ChainStore>();
         try {
             while (rs.next()) {
                 ChainStore chainStore = new ChainStore();
+                ExtendsProduct product = new ExtendsProduct();
+                boolean isStore = false;
+
+                if (rs.getDate("production_date") != null) {
+                    product.setId(rs.getInt("product_id"));
+                    product.setName(rs.getString("product_name"));
+                    product.setPrice(rs.getDouble("product_price"));
+                    product.setDescription(rs.getString("product_description"));
+                    product.setVendorId(rs.getInt("vendor_id"));
+                    product.setProductionDate(rs.getDate("production_date").toLocalDate());
+                    product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+                }
+
                 chainStore.setId(rs.getInt("chain_store_id"));
                 chainStore.setName(rs.getString("chain_store_name"));
                 chainStore.setDescription(rs.getString("chain_store_description"));
@@ -61,7 +81,19 @@ public class MySqlChainStoreDao extends AbstractDao<ChainStore, Integer> {
                 chainStore.setKitchen(rs.getString("chain_store_kitchen"));
                 chainStore.setType(rs.getString("chain_store_type"));
                 chainStore.setCardForPayments(rs.getString("card_for_payments"));
-                chainStores.add(chainStore);
+
+                if (product.getId() != 0) {
+                    for (ChainStore store : chainStores) {
+                        if (store.getId() == chainStore.getId()) {
+                            store.addItem(product);
+                            isStore = true;
+                        }
+                    }
+                    if (!isStore) {
+                        chainStore.addItem(product);
+                        chainStores.add(chainStore);
+                    }
+                } else chainStores.add(chainStore);
             }
         } catch (Exception e) {
             throw new DaoException(e);

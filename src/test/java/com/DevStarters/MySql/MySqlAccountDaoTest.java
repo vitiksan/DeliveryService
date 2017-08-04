@@ -41,7 +41,7 @@ public class MySqlAccountDaoTest {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
         Account account = new Account();
-        account.setUserId(1);
+        account.setUserId(2);
         Account getAccount = (Account) dao.create(account);
         assertNotNull(getAccount);
         System.out.println(getAccount.toString());

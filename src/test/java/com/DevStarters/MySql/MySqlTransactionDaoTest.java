@@ -16,10 +16,10 @@ public class MySqlTransactionDaoTest {
         MySqlDaoFactory factory = new MySqlDaoFactory();
         AbstractDao dao = factory.getDao(factory.getConnection(), Transaction.class);
         Transaction transaction = new Transaction();
-        transaction.setSenderAccountId(3);
+        transaction.setSenderAccountId(18);
         transaction.setAmount(2548.6);
         transaction.setTransactionTime(LocalDateTime.now());
-        transaction.setOrderId(3);
+        transaction.setOrderId(24);
         transaction.setRecipientCard("1234756850486235");
         Transaction getTransaction = (Transaction) dao.create(transaction);
         assertNotNull(getTransaction);

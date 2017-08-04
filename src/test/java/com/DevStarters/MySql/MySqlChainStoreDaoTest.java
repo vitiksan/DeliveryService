@@ -19,7 +19,7 @@ public class MySqlChainStoreDaoTest {
         chainStore.setAddress("вул. Незалежності, 16");
         chainStore.setKitchen("japanese");
         chainStore.setType("Суші-бар");
-        chainStore.setCardForPayments("1234756850486235");
+        chainStore.setCardForPayments("1234756654486235");
         ChainStore getchain = (ChainStore) dao.create(chainStore);
         assertNotNull(getchain);
         System.out.println(getchain.toString());

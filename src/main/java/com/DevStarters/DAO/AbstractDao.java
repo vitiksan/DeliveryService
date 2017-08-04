@@ -19,8 +19,6 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
 
     public abstract String getSelectQuery();
 
-    public abstract String getSelectQueryWithoutJoin();
-
     public abstract String getSelectAllQuery();
 
     public abstract String getUpdateQuery();
@@ -29,7 +27,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
 
     public abstract String getDeleteQuery();
 
-    public abstract ArrayList<T> parsData(ResultSet rs,boolean isJoin) throws DaoException;
+    public abstract ArrayList<T> parsData(ResultSet rs) throws DaoException;
 
     public abstract void parsUpdate(PreparedStatement prSt, T obj) throws DaoException;
 
@@ -49,29 +47,17 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
             throw new DaoException(e);
         }
 
-
         query = getSelectQuery() + "(SELECT last_insert_id());";
-        ArrayList<T> someList = null;
+        ArrayList<T> someList;
 
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             ResultSet rs = prSt.executeQuery();
-            someList = parsData(rs,true);
+            someList = parsData(rs);
+            if (someList == null || someList.size() != 1)
+                throw new DaoException("Error with search created object by id");
         } catch (Exception e) {
             log.error("Error with search object" + e.getMessage());
             throw new DaoException(e);
-        }
-
-        if (someList == null || someList.size() != 1) {
-            query = getSelectQueryWithoutJoin() + "(SELECT last_insert_id());";
-            try (PreparedStatement prSt = connection.prepareStatement(query)) {
-                ResultSet rs = prSt.executeQuery();
-                someList = parsData(rs,false);
-                if (someList == null || someList.size() != 1)
-                    throw new DaoException("Error with search created object by id");
-            } catch (Exception e) {
-                log.error("Error with search object" + e.getMessage());
-                throw new DaoException(e);
-            }
         }
         temp = someList.iterator().next();
         return temp;
@@ -81,30 +67,16 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
     public T read(int id) throws DaoException {
         ArrayList<T> someList;
         String query = getSelectQuery() + "?;";
-        ResultSet rs = null;
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             prSt.setInt(1, id);
-            rs = prSt.executeQuery();
-            someList = parsData(rs,true);
+            ResultSet rs = prSt.executeQuery();
+            someList = parsData(rs);
         } catch (Exception e) {
             log.error("Error with read object" + e.getMessage());
             throw new DaoException(e);
         }
 
-        if (someList == null || someList.size() == 0) {
-            query = getSelectQueryWithoutJoin() + "?;";
-            try (PreparedStatement prSt = connection.prepareStatement(query)) {
-                prSt.setInt(1, id);
-                rs = prSt.executeQuery();
-                someList = parsData(rs,false);
-            } catch (SQLException e) {
-                log.error("Error with read object" + e.getMessage());
-                throw new DaoException(e);
-            }
-        }
-
         if (someList == null || someList.size() == 0) return null;
-
         if (someList.size() > 1) {
             throw new DaoException("Отримано забато даних");
         }
@@ -119,7 +91,7 @@ public abstract class AbstractDao<T extends Identificator<PK>, PK extends Serial
 
         try (PreparedStatement prSt = connection.prepareStatement(query)) {
             ResultSet resultSet = prSt.executeQuery();
-            someList = parsData(resultSet,true);
+            someList = parsData(resultSet);
         } catch (Exception e) {
             log.error("Error with read all object" + e.getMessage());
             throw new DaoException(e);

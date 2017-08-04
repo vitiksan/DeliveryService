@@ -34,11 +34,6 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
     }
 
     @Override
-    public String getSelectQueryWithoutJoin() {
-        return "SELECT * FROM products WHERE product_id=";
-    }
-
-    @Override
     public String getSelectAllQuery() {
         return "SELECT * FROM products;";
     }
@@ -61,7 +56,7 @@ public class MySqlProductDao extends AbstractDao<Product, Integer> {
     }
 
     @Override
-    public ArrayList<Product> parsData(ResultSet rs,boolean isJoin) throws DaoException {
+    public ArrayList<Product> parsData(ResultSet rs) throws DaoException {
         ArrayList<Product> products = new ArrayList<Product>();
         try {
             while (rs.next()) {

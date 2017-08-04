@@ -3,6 +3,7 @@ package com.DevStarters.Support;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.DAO.DaoFactory;
+import com.DevStarters.Domain.PaymentSystem.Account;
 import com.DevStarters.Domain.User;
 import com.DevStarters.MySql.MySqlDaoFactory;
 import org.apache.log4j.Logger;
@@ -108,7 +109,13 @@ public class EditProfile {
                 updateUser();
                 break;
             case 6:
-                //TODO:
+                try {
+                    DaoFactory factory = new MySqlDaoFactory();
+                    AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
+                    dao.createWithField(Session.getCurrentUser().getId());
+                } catch (DaoException e) {
+                    System.out.println("Error with add new account" + e.getMessage());
+                }
                 break;
             case 7:
                 Session.getCurrentUser().deleteAccount();
