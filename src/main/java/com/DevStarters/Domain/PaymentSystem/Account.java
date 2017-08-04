@@ -107,7 +107,7 @@ public class Account implements Identificator<Integer> {
         Scanner in = new Scanner(System.in);
         try {
             System.out.println("Enter password: ");
-            return (in.nextInt() == pass);1
+            return (in.nextInt() == pass);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
