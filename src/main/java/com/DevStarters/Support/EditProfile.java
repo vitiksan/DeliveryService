@@ -136,4 +136,5 @@ public class EditProfile {
             System.out.println("Error with update" + e.getMessage());
         }
     }
+
 }
