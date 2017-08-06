@@ -138,6 +138,7 @@ public class ChainStore implements Identificator<Integer> {
     @Override
     public String toString() {
         return "ChainStore: " +
+                "\n id: " + id +
                 "\nName: " + name +
                 "\nDescription: " + description +
                 "\nAddress: " + address +
