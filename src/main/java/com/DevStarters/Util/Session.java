@@ -92,4 +92,5 @@ public class Session {
     public static void logOut() {
         currentUser = null;
     }
+
 }

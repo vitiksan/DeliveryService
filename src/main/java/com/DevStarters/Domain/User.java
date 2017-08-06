@@ -173,7 +173,7 @@ public class User implements Identificator<Integer> {
         Scanner in = new Scanner(System.in);
         boolean isAccount = false;
         Account temp = null;
-        for (Order order : orders) System.out.println(order.toString());
+        for (Account account : accounts) System.out.println(account.toString() + "\n");
         do {
             try {
                 System.out.print("Enter id account: ");
@@ -205,9 +205,17 @@ public class User implements Identificator<Integer> {
 
     public void addNewOrder() {
         DaoFactory factory = new MySqlDaoFactory();
+        Scanner in = new Scanner(System.in);
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
             orders.add((Order) dao.create(new Order(id)));
+            System.out.println("Order is created");
+            int choice = -1;
+            do {
+                System.out.println("Do you want add product to order& (1-Yes, 0-No)");
+                choice = in.nextInt();
+                if (choice == 1) addProductToOrder();
+            } while (choice < 0 || choice > 1);
         } catch (DaoException e) {
             System.out.println(e.getMessage());
         }
@@ -218,7 +226,7 @@ public class User implements Identificator<Integer> {
         boolean isOrder = false;
         Order temp = null;
         if (orders.size() > 0) {
-            for (Order order : orders) System.out.println(order.toString());
+            for (Order order : orders) System.out.println(order.toString() + "\n");
             do {
                 try {
                     System.out.print("Enter id order do you want to add product for: ");
@@ -246,19 +254,24 @@ public class User implements Identificator<Integer> {
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Product.class);
             ArrayList<Product> products = dao.readAll();
-            for (Product item : products) System.out.println(item.toString());
-            System.out.print("Enter id of product which you want to buy: ");
-            int id = in.nextInt();
-            for (Product item : products) {
-                if (item.getId() == id) {
-                    System.out.print("Enter count of product: ");
-                    int count = in.nextInt();
-                    for (Order order : orders)
-                        if (order.getId() == orderId && !order.getStatus().equals("executed")) {
-                            order.addNewLine(new OrderLine(orderId, item, count));
-                        }
+            int choice = -1;
+            do {
+                for (Product item : products) System.out.println(item.toString() + "\n");
+                System.out.print("Enter id of product which you want to buy: ");
+                int id = in.nextInt();
+                for (Product item : products) {
+                    if (item.getId() == id) {
+                        System.out.print("Enter count of product: ");
+                        int count = in.nextInt();
+                        for (Order order : orders)
+                            if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                                order.addNewLine(new OrderLine(orderId, item, count));
+                            }
+                    }
                 }
-            }
+                System.out.println("Do you want to add another product& (1-Yes. 0-No)");
+                choice = in.nextInt();
+            } while (choice == 1);
         } catch (DaoException e) {
             System.out.println(e.getMessage());
         } catch (NumberFormatException nfe) {
@@ -267,7 +280,6 @@ public class User implements Identificator<Integer> {
     }
 
     public void makeOrder() {
-        Scanner in = new Scanner(System.in);
         int orderId = choiceOder().getId();
         Account accountForPayment = choiceAccount();
         for (Order order : orders) {

@@ -38,15 +38,16 @@ public class Menu {
                 System.out.println("5-Show all products in concrete chain store");
                 System.out.println("6-Create new order");
                 System.out.println("7-Add products to order");
-                System.out.println("8-Edit profile");
-                System.out.println("9-Logout");
+                System.out.println("8-Make order");
+                System.out.println("9-Edit profile");
+                System.out.println("10-Logout");
             }
             if (Session.getCurrentUser().getLogin().contentEquals("admin")
                     || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
-                System.out.println("10-Add new chain store");
-                System.out.println("11-Add product to chain store");
-                System.out.println("12-Delete product from chain store");
-                System.out.println("13-Delete chain store");
+                System.out.println("11-Add new chain store");
+                System.out.println("12-Add product to chain store");
+                System.out.println("13-Delete product from chain store");
+                System.out.println("14-Delete chain store");
             }
             System.out.println("0-Exit");
         } catch (NullPointerException e) {
@@ -96,21 +97,24 @@ public class Menu {
                 Session.getCurrentUser().addProductToOrder();
                 break;
             case 8:
-                EditProfile.edit();
+                Session.getCurrentUser().makeOrder();
                 break;
             case 9:
-                Session.logOut();
+                EditProfile.edit();
                 break;
             case 10:
-                addChainStore();
+                Session.logOut();
                 break;
             case 11:
-                addProduct();
+                addChainStore();
                 break;
             case 12:
-                deleteProduct();
+                addProduct();
                 break;
             case 13:
+                deleteProduct();
+                break;
+            case 14:
                 deleteChainStore();
                 break;
             case 0:
