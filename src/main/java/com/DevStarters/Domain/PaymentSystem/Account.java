@@ -95,6 +95,7 @@ public class Account implements Identificator<Integer> {
      * @param count - Сума, на яку поповнюється рахунок
      * @return - true якщо операція виконана, false якщо ні
      */
+
     public boolean fillBalance(double count) {
         if (count > 0) {
             balance += count;
