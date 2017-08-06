@@ -50,7 +50,7 @@ public class User implements Identificator<Integer> {
     }
 
     public User(String name, String surname, String login, String password,
-                String address, int year, int month, int day, int passForAccount) {
+                String address, int year, int month, int day, int passForAccount, double balance) {
         this.name = name;
         this.surname = surname;
         this.login = login;
@@ -58,7 +58,7 @@ public class User implements Identificator<Integer> {
         this.address = address;
         bornDate = LocalDate.of(year, month, day);
         accounts = new ArrayList<Account>();
-        accounts.add(createAccount(passForAccount));
+        accounts.add(createAccount(passForAccount, balance));
     }
 
     public int getId() {
@@ -125,11 +125,11 @@ public class User implements Identificator<Integer> {
         this.accounts = accounts;
     }
 
-    public Account createAccount(int pass) {
+    public Account createAccount(int pass, double balance) {
         DaoFactory factory = new MySqlDaoFactory();
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-            return (Account) dao.create(new Account(id, pass));
+            return (Account) dao.create(new Account(id, pass, balance));
         } catch (DaoException e) {
             System.out.println("Error with create Account in Database :" + e.getMessage());
             return null;
@@ -137,14 +137,7 @@ public class User implements Identificator<Integer> {
     }
 
     public void addAccount(Account account) {
-        DaoFactory factory = new MySqlDaoFactory();
-        try {
-            AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-            Account getAccount = (Account) dao.create(account);
-            if (getAccount == null) throw new DaoException();
-        } catch (DaoException e) {
-            System.out.println("Error with add Account to Database :" + e.getMessage());
-        }
+        accounts.add(account);
     }
 
     public void deleteAccount() {
@@ -233,12 +226,13 @@ public class User implements Identificator<Integer> {
                     for (Order order : orders) {
                         if (order.getId() == orderId && !order.getStatus().equals("executed")) {
                             temp = order;
+                            isOrder = true;
                         }
                     }
                     if (!isOrder) System.out.println("Not found this order or this order`s executed");
                 } catch (NumberFormatException nfe) {
                     System.out.println(nfe.getMessage());
-                    isOrder=false;
+                    isOrder = false;
                 }
             } while (!isOrder);
         } else System.out.println("You have not orders");

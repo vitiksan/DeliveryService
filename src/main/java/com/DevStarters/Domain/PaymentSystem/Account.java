@@ -33,6 +33,14 @@ public class Account implements Identificator<Integer> {
         setExpCard();
     }
 
+    public Account(int userId, int pass,double balance) {
+        cardNumber = CardNumberGenerator.generateVCNumber();
+        balance = 0;
+        this.userId = userId;
+        this.pass = pass;
+        setExpCard();
+    }
+
     public int getId() {
         return id;
     }

@@ -17,7 +17,7 @@ public class Menu {
     private static int choose = -1;
 
     public static void main(String[] args) {
-        System.out.println("Welcome to the shop");
+        System.out.println("Welcome to delivery service");
         do {
             information();
             choose = chooses();
@@ -27,25 +27,30 @@ public class Menu {
 
     private static void information() {
         System.out.println("You can: ");
-        System.out.println("1-Login");
-        System.out.println("2-Register");
-        if (!Session.getCurrentUser().equals(null)) {
-            System.out.println("3-Show all chain stores");
-            System.out.println("4-Show all products");
-            System.out.println("5-Show all products in concrete chain store");
-            System.out.println("6-Create new order");
-            System.out.println("7-Add products to order");
-            System.out.println("8-Edit profile");
-            System.out.println("9-Logout");
+        if (Session.getCurrentUser() == null) {
+            System.out.println("1-Login");
+            System.out.println("2-Register");
         }
-        if (Session.getCurrentUser().getLogin().contentEquals("admin")
-                || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
-            System.out.println("10-Add new chain store");
-            System.out.println("11-Add product to chain store");
-            System.out.println("12-Delete product from chain store");
-            System.out.println("13-Delete chain store");
+        try {
+            if (Session.getCurrentUser() != null) {
+                System.out.println("3-Show all chain stores");
+                System.out.println("4-Show all products");
+                System.out.println("5-Show all products in concrete chain store");
+                System.out.println("6-Create new order");
+                System.out.println("7-Add products to order");
+                System.out.println("8-Edit profile");
+                System.out.println("9-Logout");
+            }
+            if (Session.getCurrentUser().getLogin().contentEquals("admin")
+                    || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
+                System.out.println("10-Add new chain store");
+                System.out.println("11-Add product to chain store");
+                System.out.println("12-Delete product from chain store");
+                System.out.println("13-Delete chain store");
+            }
+            System.out.println("0-Exit");
+        } catch (NullPointerException e) {
         }
-        System.out.println("0-Exit");
     }
 
     private static int chooses() {
@@ -55,12 +60,10 @@ public class Menu {
             try {
                 System.out.print("Enter your choice, please: ");
                 temp = Integer.parseInt(in.next());
-                if ((Session.getCurrentUser().getLogin().contentEquals("admin") && temp > 13)
-                        || temp > 9) {
+                if (temp > 13)
                     throw new Exception();
-                }
             } catch (Exception e) {
-                System.out.println("Your choice  undefined");
+                System.out.println("Your choice undefined");
                 log.error("Your choice undefined");
                 log.error(e.getMessage());
                 temp = -1;
