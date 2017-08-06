@@ -122,6 +122,7 @@ public class Product implements Identificator<Integer> {
     @Override
     public String toString() {
         return "Product: " +
+                "\nProduct id: "+ id+
                 "\nName: " + name +
                 "\nPrice: " + price +
                 "\nDescription: " + description +

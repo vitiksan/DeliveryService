@@ -50,7 +50,7 @@ public class User implements Identificator<Integer> {
     }
 
     public User(String name, String surname, String login, String password,
-                String address, int year, int month, int day, int passForAccount) {
+                String address, int year, int month, int day, int passForAccount, double balance) {
         this.name = name;
         this.surname = surname;
         this.login = login;
@@ -58,7 +58,7 @@ public class User implements Identificator<Integer> {
         this.address = address;
         bornDate = LocalDate.of(year, month, day);
         accounts = new ArrayList<Account>();
-        accounts.add(createAccount(passForAccount));
+        accounts.add(createAccount(passForAccount, balance));
     }
 
     public int getId() {
@@ -125,11 +125,11 @@ public class User implements Identificator<Integer> {
         this.accounts = accounts;
     }
 
-    public Account createAccount(int pass) {
+    public Account createAccount(int pass, double balance) {
         DaoFactory factory = new MySqlDaoFactory();
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-            return (Account) dao.create(new Account(id, pass));
+            return (Account) dao.create(new Account(id, pass, balance));
         } catch (DaoException e) {
             System.out.println("Error with create Account in Database :" + e.getMessage());
             return null;
@@ -137,14 +137,7 @@ public class User implements Identificator<Integer> {
     }
 
     public void addAccount(Account account) {
-        DaoFactory factory = new MySqlDaoFactory();
-        try {
-            AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
-            Account getAccount = (Account) dao.create(account);
-            if (getAccount == null) throw new DaoException();
-        } catch (DaoException e) {
-            System.out.println("Error with add Account to Database :" + e.getMessage());
-        }
+        accounts.add(account);
     }
 
     public void deleteAccount() {
@@ -180,16 +173,24 @@ public class User implements Identificator<Integer> {
         Scanner in = new Scanner(System.in);
         boolean isAccount = false;
         Account temp = null;
-        for (Order order : orders) System.out.println(order.toString());
+        for (Account account : accounts) System.out.println(account.toString() + "\n");
         do {
-            System.out.print("Enter id account: ");
-            int accountId = in.nextInt();
-            for (Account account : accounts) {
-                if (account.getId() == accountId) {
-                    temp = account;
+            try {
+                System.out.print("Enter id account: ");
+                int accountId = in.nextInt();
+                for (Account account : accounts) {
+                    if (account.getId() == accountId) {
+                        temp = account;
+                    }
                 }
+                if (!isAccount) throw new Exception("Not found this account, try again");
+            } catch (NumberFormatException nfe) {
+                System.out.println(nfe.getMessage());
+                isAccount = false;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                isAccount = false;
             }
-            if (!isAccount) System.out.println("Not found this account");
         } while (!isAccount);
         return temp;
     }
@@ -204,9 +205,17 @@ public class User implements Identificator<Integer> {
 
     public void addNewOrder() {
         DaoFactory factory = new MySqlDaoFactory();
+        Scanner in = new Scanner(System.in);
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Order.class);
             orders.add((Order) dao.create(new Order(id)));
+            System.out.println("Order is created");
+            int choice = -1;
+            do {
+                System.out.println("Do you want add product to order& (1-Yes, 0-No)");
+                choice = in.nextInt();
+                if (choice == 1) addProductToOrder();
+            } while (choice < 0 || choice > 1);
         } catch (DaoException e) {
             System.out.println(e.getMessage());
         }
@@ -217,16 +226,22 @@ public class User implements Identificator<Integer> {
         boolean isOrder = false;
         Order temp = null;
         if (orders.size() > 0) {
-            for (Order order : orders) System.out.println(order.toString());
+            for (Order order : orders) System.out.println(order.toString() + "\n");
             do {
-                System.out.print("Enter id order do you want to add product for: ");
-                int orderId = in.nextInt();
-                for (Order order : orders) {
-                    if (order.getId() == orderId && !order.getStatus().equals("executed")) {
-                        temp = order;
+                try {
+                    System.out.print("Enter id order do you want to add product for: ");
+                    int orderId = in.nextInt();
+                    for (Order order : orders) {
+                        if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                            temp = order;
+                            isOrder = true;
+                        }
                     }
+                    if (!isOrder) System.out.println("Not found this order or this order`s executed");
+                } catch (NumberFormatException nfe) {
+                    System.out.println(nfe.getMessage());
+                    isOrder = false;
                 }
-                if (!isOrder) System.out.println("Not found this order or this order`s executed");
             } while (!isOrder);
         } else System.out.println("You have not orders");
         return temp;
@@ -239,26 +254,32 @@ public class User implements Identificator<Integer> {
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Product.class);
             ArrayList<Product> products = dao.readAll();
-            for (Product item : products) System.out.println(item.toString());
-            System.out.print("Enter id of product which you want to buy: ");
-            int id = in.nextInt();
-            for (Product item : products) {
-                if (item.getId() == id) {
-                    System.out.print("Enter count of product: ");
-                    int count = in.nextInt();
-                    for (Order order : orders)
-                        if (order.getId() == orderId && !order.getStatus().equals("executed")) {
-                            order.addNewLine(new OrderLine(orderId, item, count));
-                        }
+            int choice = -1;
+            do {
+                for (Product item : products) System.out.println(item.toString() + "\n");
+                System.out.print("Enter id of product which you want to buy: ");
+                int id = in.nextInt();
+                for (Product item : products) {
+                    if (item.getId() == id) {
+                        System.out.print("Enter count of product: ");
+                        int count = in.nextInt();
+                        for (Order order : orders)
+                            if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                                order.addNewLine(new OrderLine(orderId, item, count));
+                            }
+                    }
                 }
-            }
+                System.out.println("Do you want to add another product& (1-Yes. 0-No)");
+                choice = in.nextInt();
+            } while (choice == 1);
         } catch (DaoException e) {
             System.out.println(e.getMessage());
+        } catch (NumberFormatException nfe) {
+            System.out.println(nfe.getMessage());
         }
     }
 
     public void makeOrder() {
-        Scanner in = new Scanner(System.in);
         int orderId = choiceOder().getId();
         Account accountForPayment = choiceAccount();
         for (Order order : orders) {

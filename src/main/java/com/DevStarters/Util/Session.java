@@ -3,6 +3,7 @@ package com.DevStarters.Util;
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
 import com.DevStarters.Domain.User;
+import com.DevStarters.Menu.EditProfile;
 import com.DevStarters.MySql.MySqlDaoFactory;
 
 import java.util.ArrayList;
@@ -51,12 +52,17 @@ public class Session {
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), User.class);
             Scanner in = new Scanner(System.in);
+            ArrayList<User> users = dao.readAll();
+
             System.out.print("Enter your name: ");
             String name = in.nextLine();
             System.out.print("Enter your surname: ");
             String surname = in.nextLine();
             System.out.print("Enter your login: ");
             String login = in.nextLine();
+            for (User user : users)
+                if (login.equals(user.getLogin()))
+                    throw new DaoException("This login exist");
             System.out.print("Enter your password: ");
             String password = in.nextLine();
             System.out.print("Enter your address: ");
@@ -70,6 +76,14 @@ public class Session {
 
             User user = new User(name, surname, login, password, address, year, month, day);
             currentUser = (User) dao.create(user);
+
+            int choice = -1;
+            do {
+                System.out.println("Do you want to edit your profile: 1-Yes, 0-No");
+                choice = in.nextInt();
+                if (choice == 1)
+                    EditProfile.edit();
+            } while (choice < 0 || choice > 1);
         } catch (DaoException e) {
             System.out.println("Error with register" + e.getMessage());
         }
@@ -78,4 +92,5 @@ public class Session {
     public static void logOut() {
         currentUser = null;
     }
+
 }

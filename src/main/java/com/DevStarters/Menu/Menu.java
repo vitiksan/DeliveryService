@@ -1,4 +1,4 @@
-package com.DevStarters.Support;
+package com.DevStarters.Menu;
 
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
@@ -6,6 +6,7 @@ import com.DevStarters.DAO.DaoFactory;
 import com.DevStarters.Domain.ChainStore;
 import com.DevStarters.Domain.Product;
 import com.DevStarters.MySql.MySqlDaoFactory;
+import com.DevStarters.Util.Session;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Menu {
     private static int choose = -1;
 
     public static void main(String[] args) {
-        System.out.println("Welcome to the shop");
+        System.out.println("Welcome to delivery service");
         do {
             information();
             choose = chooses();
@@ -26,25 +27,31 @@ public class Menu {
 
     private static void information() {
         System.out.println("You can: ");
-        System.out.println("1-Login");
-        System.out.println("2-Register");
-        if (!Session.getCurrentUser().equals(null)) {
-            System.out.println("3-Show all chain stores");
-            System.out.println("4-Show all products");
-            System.out.println("5-Show all products in concrete chain store");
-            System.out.println("6-Create new order");
-            System.out.println("7-Add products to order");
-            System.out.println("8-Edit profile");
-            System.out.println("9-Logout");
+        if (Session.getCurrentUser() == null) {
+            System.out.println("1-Login");
+            System.out.println("2-Register");
         }
-        if (Session.getCurrentUser().getLogin().contentEquals("admin")
-                || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
-            System.out.println("10-Add new chain store");
-            System.out.println("11-Add product to chain store");
-            System.out.println("12-Delete product from chain store");
-            System.out.println("13-Delete chain store");
+        try {
+            if (Session.getCurrentUser() != null) {
+                System.out.println("3-Show all chain stores");
+                System.out.println("4-Show all products");
+                System.out.println("5-Show all products in concrete chain store");
+                System.out.println("6-Create new order");
+                System.out.println("7-Add products to order");
+                System.out.println("8-Make order");
+                System.out.println("9-Edit profile");
+                System.out.println("10-Logout");
+            }
+            if (Session.getCurrentUser().getLogin().contentEquals("admin")
+                    || Session.getCurrentUser().getLogin().contentEquals("Admin")) {
+                System.out.println("11-Add new chain store");
+                System.out.println("12-Add product to chain store");
+                System.out.println("13-Delete product from chain store");
+                System.out.println("14-Delete chain store");
+            }
+            System.out.println("0-Exit");
+        } catch (NullPointerException e) {
         }
-        System.out.println("0-Exit");
     }
 
     private static int chooses() {
@@ -54,12 +61,10 @@ public class Menu {
             try {
                 System.out.print("Enter your choice, please: ");
                 temp = Integer.parseInt(in.next());
-                if ((Session.getCurrentUser().getLogin().contentEquals("admin") && temp > 13)
-                        || temp > 9) {
+                if (temp > 14)
                     throw new Exception();
-                }
             } catch (Exception e) {
-                System.out.println("Your choice  undefined");
+                System.out.println("Your choice undefined");
                 log.error("Your choice undefined");
                 log.error(e.getMessage());
                 temp = -1;
@@ -92,21 +97,24 @@ public class Menu {
                 Session.getCurrentUser().addProductToOrder();
                 break;
             case 8:
-                EditProfile.edit();
+                Session.getCurrentUser().makeOrder();
                 break;
             case 9:
-                Session.logOut();
+                EditProfile.edit();
                 break;
             case 10:
-                addChainStore();
+                Session.logOut();
                 break;
             case 11:
-                addProduct();
+                addChainStore();
                 break;
             case 12:
-                deleteProduct();
+                addProduct();
                 break;
             case 13:
+                deleteProduct();
+                break;
+            case 14:
                 deleteChainStore();
                 break;
             case 0:
@@ -125,6 +133,7 @@ public class Menu {
             shops = dao.readAll();
             for (ChainStore item : shops) {
                 System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -139,6 +148,7 @@ public class Menu {
             products = dao.readAll();
             for (Product item : products) {
                 System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -158,6 +168,7 @@ public class Menu {
             for (Product item : products) {
                 if (item.getVendorId() == id)
                     System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -184,7 +195,7 @@ public class Menu {
             ArrayList<ChainStore> shops = dao.readAll();
             dao = factory.getDao(factory.getConnection(), Product.class);
             for (ChainStore item : shops) System.out.println(item.toString());
-            System.out.println("Enter chain store`s id you want to add product to");
+            System.out.println("Enter chain store`s id you want to add product to: ");
             int id = in.nextInt();
             for (ChainStore item : shops) {
                 if (item.getId() == id) {
@@ -207,7 +218,7 @@ public class Menu {
             AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
             ArrayList<ChainStore> shops = dao.readAll();
             for (ChainStore item : shops) System.out.println(item.toString());
-            System.out.println("Enter chain store`s id which you want to delete");
+            System.out.println("Enter chain store`s id which you want to delete: ");
             int id = in.nextInt();
             for (ChainStore item : shops) {
                 if (item.getId() == id) {
@@ -236,7 +247,7 @@ public class Menu {
             for (Product item : products) {
                 if (item.getVendorId() == id) System.out.println(item.toString());
             }
-            System.out.println("Enter product`s id which you want to delete");
+            System.out.println("Enter product`s id which you want to delete: ");
             int prId = in.nextInt();
             for (Product item : products) {
                 if (item.getId() == prId) {

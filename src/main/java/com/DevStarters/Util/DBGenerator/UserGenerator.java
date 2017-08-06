@@ -1,4 +1,4 @@
-package com.DevStarters.Support.Generator;
+package com.DevStarters.Util.DBGenerator;
 
 import com.DevStarters.DAO.AbstractDao;
 import com.DevStarters.DAO.DaoException;
@@ -59,7 +59,7 @@ public class UserGenerator {
     public static String readFile(String str) throws FileNotFoundException {
         ArrayList<String> words = new ArrayList<>();
 
-        String inputData = FileReader.loadBook("./src/main/java/com/DevStarters/Support/Generator/" + str + ".txt");
+        String inputData = FileReader.loadBook("./src/main/java/com/DevStarters/Util/DBGenerator/" + str + ".txt");
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(inputData.getBytes());
         System.setIn(byteArrayInputStream);
 
