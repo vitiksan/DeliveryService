@@ -129,6 +129,7 @@ public class Menu {
             shops = dao.readAll();
             for (ChainStore item : shops) {
                 System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -143,6 +144,7 @@ public class Menu {
             products = dao.readAll();
             for (Product item : products) {
                 System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -162,6 +164,7 @@ public class Menu {
             for (Product item : products) {
                 if (item.getVendorId() == id)
                     System.out.println(item.toString());
+                System.out.println();
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
