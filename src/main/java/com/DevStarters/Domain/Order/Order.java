@@ -163,9 +163,15 @@ public class Order implements Identificator<Integer> {
 
     @Override
     public String toString() {
-        return "Order: " +
-                "\nUser id: " + userId +
+        String temp = "Order: " +
+                "\nOrder id: " + id +
                 "\nPrice: " + price +
-                "\nStatus: " + status;
+                "\nStatus: " + status +
+                "\nProducts in order: ";
+        for (OrderLine orderLine: lines){
+            temp+= orderLine.toString();
+        }
+        return temp;
+
     }
 }

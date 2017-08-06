@@ -176,6 +176,7 @@ public class Account implements Identificator<Integer> {
     @Override
     public String toString() {
         return "Account: " +
+                "\nAccount id: "+id+
                 "\nCard number: " + cardNumber +
                 "\nBalance: " + balance +
                 "\nUser id: " + userId +
