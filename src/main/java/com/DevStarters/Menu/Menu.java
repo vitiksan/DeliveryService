@@ -61,7 +61,7 @@ public class Menu {
             try {
                 System.out.print("Enter your choice, please: ");
                 temp = Integer.parseInt(in.next());
-                if (temp > 13)
+                if (temp > 14)
                     throw new Exception();
             } catch (Exception e) {
                 System.out.println("Your choice undefined");
