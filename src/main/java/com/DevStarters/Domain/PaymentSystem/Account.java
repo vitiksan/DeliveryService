@@ -33,7 +33,7 @@ public class Account implements Identificator<Integer> {
         setExpCard();
     }
 
-    public Account(int userId, int pass,double balance) {
+    public Account(int userId, int pass, double balance) {
         cardNumber = CardNumberGenerator.generateVCNumber();
         balance = 0;
         this.userId = userId;
@@ -80,22 +80,12 @@ public class Account implements Identificator<Integer> {
         return false;
     }
 
-    public boolean getMoney(double money,int pass) {
-        boolean temp = checkPassword();
-        if (money <= this.balance && temp) {
-            this.balance -= money;
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Поповнення рахунку
      *
      * @param count - Сума, на яку поповнюється рахунок
      * @return - true якщо операція виконана, false якщо ні
      */
-
     public boolean fillBalance(double count) {
         if (count > 0) {
             balance += count;
@@ -120,21 +110,6 @@ public class Account implements Identificator<Integer> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
-        }
-    }
-
-    public void changePassword() throws Exception {
-        Scanner in = new Scanner(System.in);
-        boolean temp;
-        int newPass, repeatNewPass;
-            temp = checkPassword();
-        if (temp) {
-            do {
-                System.out.println("Enter new password: ");
-                newPass = in.nextInt();
-                System.out.println("Repeat new password: ");
-                repeatNewPass = in.nextInt();
-            } while (newPass != repeatNewPass);
         }
     }
 
@@ -166,22 +141,16 @@ public class Account implements Identificator<Integer> {
         transactions.add(transaction);
     }
 
-    public HashSet<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(HashSet<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
     @Override
     public String toString() {
-        return "Account: " +
-                "\nAccount id: "+id+
+        String temp = "Account: " +
+                "\nAccount id: " + id +
                 "\nCard number: " + cardNumber +
                 "\nBalance: " + balance +
                 "\nUser id: " + userId +
-                "\nExpiration card date: " + expirationCardDate.getDayOfMonth()+"."
-                +expirationCardDate.getMonth()+"."+expirationCardDate.getYear();
+                "\nExpiration card date: " + expirationCardDate.getDayOfMonth() + "."
+                + expirationCardDate.getMonth() + "." + expirationCardDate.getYear();
+        temp += (checkExpDate()) ? "\n" : "Card will be closed through 7 days\n";
+        return temp;
     }
 }

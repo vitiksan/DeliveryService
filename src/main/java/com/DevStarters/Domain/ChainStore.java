@@ -98,14 +98,6 @@ public class ChainStore implements Identificator<Integer> {
         this.cardForPayments = cardForPayments;
     }
 
-    public HashSet<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(HashSet<Product> products) {
-        this.products = products;
-    }
-
     public Product removeItem() {
         Scanner in = new Scanner(System.in);
         Product temp = null;
@@ -128,11 +120,6 @@ public class ChainStore implements Identificator<Integer> {
             System.out.println(e.getMessage());
         }
         return temp;
-    }
-
-    public Product removeItem(Product product) {
-        boolean temp = products.remove(product);
-        return (temp) ? product : null;
     }
 
     @Override

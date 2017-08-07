@@ -121,10 +121,6 @@ public class User implements Identificator<Integer> {
         return accounts;
     }
 
-    public void setAccounts(ArrayList<Account> accounts) {
-        this.accounts = accounts;
-    }
-
     public Account createAccount(int pass, double balance) {
         DaoFactory factory = new MySqlDaoFactory();
         try {
@@ -141,20 +137,18 @@ public class User implements Identificator<Integer> {
     }
 
     public void deleteAccount() {
-        Scanner in = new Scanner(System.in);
-        String card = choiceAccount().getCardNumber();
+        int id = choiceAccount().getId();
         DaoFactory factory = new MySqlDaoFactory();
         try {
             AbstractDao dao = factory.getDao(factory.getConnection(), Account.class);
             for (Account account : accounts) {
-                if (account.getCardNumber().equals(card)) {
-                    if (account.getBalance() == 0) {
+                if (account.getId() == id) {
+                    if (account.getBalance() > 0) {
                         dao.delete(account);
                         accounts.remove(account);
                     } else {
                         if (accounts.size() > 1 && !accounts.get(0).equals(account)) {
-                            accounts.get(0).fillBalance(
-                                    accounts.get(0).getBalance() + account.getBalance());
+                            accounts.get(0).fillBalance(account.getBalance());
                             System.out.println("Many transfer from from card(" + account.getCardNumber() +
                                     ") to card(" + accounts.get(0).getCardNumber() + ")");
                             dao.delete(account);
@@ -171,7 +165,6 @@ public class User implements Identificator<Integer> {
 
     public Account choiceAccount() {
         Scanner in = new Scanner(System.in);
-        boolean isAccount = false;
         Account temp = null;
         for (Account account : accounts) System.out.println(account.toString() + "\n");
         do {
@@ -183,24 +176,14 @@ public class User implements Identificator<Integer> {
                         temp = account;
                     }
                 }
-                if (!isAccount) throw new Exception("Not found this account, try again");
+                if (temp == null) throw new Exception("Not found this account, try again");
             } catch (NumberFormatException nfe) {
                 System.out.println(nfe.getMessage());
-                isAccount = false;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                isAccount = false;
             }
-        } while (!isAccount);
+        } while (temp != null);
         return temp;
-    }
-
-    public HashSet<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(HashSet<Order> orders) {
-        this.orders = orders;
     }
 
     public void addNewOrder() {
@@ -223,7 +206,6 @@ public class User implements Identificator<Integer> {
 
     public Order choiceOder() {
         Scanner in = new Scanner(System.in);
-        boolean isOrder = false;
         Order temp = null;
         if (orders.size() > 0) {
             for (Order order : orders) System.out.println(order.toString() + "\n");
@@ -234,15 +216,13 @@ public class User implements Identificator<Integer> {
                     for (Order order : orders) {
                         if (order.getId() == orderId && !order.getStatus().equals("executed")) {
                             temp = order;
-                            isOrder = true;
                         }
                     }
-                    if (!isOrder) System.out.println("Not found this order or this order`s executed");
+                    if (temp == null) System.out.println("Not found this order or this order`s executed");
                 } catch (NumberFormatException nfe) {
                     System.out.println(nfe.getMessage());
-                    isOrder = false;
                 }
-            } while (!isOrder);
+            } while (temp != null);
         } else System.out.println("You have not orders");
         return temp;
     }
@@ -264,9 +244,8 @@ public class User implements Identificator<Integer> {
                         System.out.print("Enter count of product: ");
                         int count = in.nextInt();
                         for (Order order : orders)
-                            if (order.getId() == orderId && !order.getStatus().equals("executed")) {
+                            if (order.getId() == orderId)
                                 order.addNewLine(new OrderLine(orderId, item, count));
-                            }
                     }
                 }
                 System.out.println("Do you want to add another product& (1-Yes. 0-No)");
@@ -280,11 +259,8 @@ public class User implements Identificator<Integer> {
     }
 
     public void makeOrder() {
-        int orderId = choiceOder().getId();
         Account accountForPayment = choiceAccount();
-        for (Order order : orders) {
-            if (order.getId() == orderId) order.makeOrder(accountForPayment);
-        }
+        choiceOder().makeOrder(accountForPayment);
     }
 
     @Override

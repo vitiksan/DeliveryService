@@ -166,9 +166,10 @@ public class Menu {
             AbstractDao dao = factory.getDao(factory.getConnection(), Product.class);
             products = dao.readAll();
             for (Product item : products) {
-                if (item.getVendorId() == id)
+                if (item.getVendorId() == id) {
                     System.out.println(item.toString());
-                System.out.println();
+                    System.out.println();
+                }
             }
         } catch (DaoException e) {
             System.out.println("Error with read DB");
@@ -239,23 +240,15 @@ public class Menu {
             DaoFactory factory = new MySqlDaoFactory();
             AbstractDao dao = factory.getDao(factory.getConnection(), ChainStore.class);
             ArrayList<ChainStore> shops = dao.readAll();
-            ArrayList<Product> products = null;
-            dao = factory.getDao(factory.getConnection(), Product.class);
             for (ChainStore item : shops) System.out.println(item.toString());
             System.out.println("Enter chain store`s id you want to delete product from: ");
             int id = in.nextInt();
-            for (Product item : products) {
-                if (item.getVendorId() == id) System.out.println(item.toString());
-            }
-            System.out.println("Enter product`s id which you want to delete: ");
-            int prId = in.nextInt();
-            for (Product item : products) {
-                if (item.getId() == prId) {
-                    dao.delete(item);
+            for (ChainStore item : shops)
+                if (item.getId() == id) {
+                    item.removeItem();
                     temp = true;
                 }
-            }
-            if (!temp) throw new DaoException("Not found product");
+            if (!temp) throw new DaoException("Not found shop");
         } catch (DaoException e) {
             System.out.println("Error with delete product: " + e.getMessage());
         }

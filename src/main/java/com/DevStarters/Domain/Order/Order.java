@@ -111,7 +111,7 @@ public class Order implements Identificator<Integer> {
             dao = factory.getDao(factory.getConnection(), Order.class);
             dao.update(this);
         } catch (DaoException e) {
-            System.out.println("Error with add new line to order :" + e.getMessage());
+            System.out.println("Error with add new line to order: " + e.getMessage());
         }
     }
 
